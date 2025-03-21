@@ -18,6 +18,7 @@ function updateAdv() {
         gfds[i] = spells[gfds[i]].name;
     }
     gfdOutcomesList.innerHTML = '(' + gfds.length + ') ' + (gfds.length?gfds.join(', '):'cannot cast');
+    if (parseInt(max.value) < parseInt(current.value)) { updateManaWith(current.value); }
 }
 
 function recalcMult() {
