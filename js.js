@@ -57,7 +57,9 @@ const spells ={
 }
 const lvl = document.getElementById("level");
 const count = document.getElementById("count");
+const current = document.getElementById("curmana");
 const max = document.getElementById("maxmana");
+const max2 = document.getElementById("maxmana2");
 const calcBestMagic = document.getElementById("calcOptimal")
 const si = document.getElementById("SI");
 const rb = document.getElementById("RB");
@@ -70,6 +72,11 @@ const multi = document.getElementById("multi");
 const gudRGN = document.getElementById("gudRegen");
 const arbitrary = document.getElementById("arbitraryCast");
 const ACmagicLeft = document.getElementById("ACmagicLeft");
+const gfdRandom = document.getElementById("gfdRandom");
+function updateManaWith(value) {
+    max.value = value;
+    max2.value = value;
+}
 
 let discount = 1;
 let fasterRegen = false;
@@ -184,13 +191,13 @@ function calculateStuff(){
     for(const spell in spells){
         let me = spells[spell];
         if(me.customtime){
-            if(calcGFD)spelldisplays[i].innerHTML = me.name+":<br>Mana cost: " + cost(me.base, me.percent/100, maximum) + '(' + cost(me.base, me.percent/100, maximum) +" from GFD)<br>"+ (averageGFDtime(maximum, !buffs, gpoc, edifice, castnum, 0));
+            if(calcGFD)spelldisplays[i].innerHTML = me.name+":<br>Mana cost: " + cost(me.base, me.percent/100, maximum) + "<br>"+ (averageGFDtime(maximum, !buffs, gpoc, edifice, castnum, 0));
             else spelldisplays[i].innerHTML = me.name+":<br>Not calculating this right now<br> (Due to your settings)";
         }else{
             let output = multiCost(me.base, me.percent, maximum, castnum, minmana, true)
             let realmanacost = output[0];
             let manacoststr = output[1];
-            let str = me.name+":<br>Mana cost: " +  manacoststr  +"<br>"+ (maximum<realmanacost? "    Unable to cast":" Recharge time: "+Math.round(getRegenTime(maximum-realmanacost, maximum)*1000)/1000+" seconds");
+            let str = me.name+":<br>Mana cost: " +  manacoststr + " (" + (0.5 * cost(me.base, me.percent/100, maximum)) +" from GFD)" +"<br>"+ (maximum<realmanacost? "    Unable to cast":" Recharge time: "+Math.round(getRegenTime(maximum-realmanacost, maximum)*1000)/1000+" seconds");
             let a = 0;
             let bestTime = 0;
             if(calcBest){

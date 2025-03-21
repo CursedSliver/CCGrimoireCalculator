@@ -1,4 +1,25 @@
 
+const spellsDropdown = document.getElementById('spellsDropdown');
+for (let i in spells) {
+    if (i == 'gfd') { continue; }
+    spellsDropdown.innerHTML += '<option value="' + i + '">' + spells[i].name + '</option>';
+}
+const minAllowedMana = document.getElementById('minmanacur');
+const maxAllowedMana = document.getElementById('maxmanacur');
+const manaLimitsConfig = document.getElementById('manaLimitsConfig');
+const desiredOutcomeOutput = document.getElementById('desiredOutcomeOutput');
+const gfdOutcomesList = document.getElementById('gfdOutcomesList');
+const GFDMaxForRefund = document.getElementById('GFDMaxForRefund');
+const refundOutput = document.getElementById('refundOutput');
+
+function updateAdv() {
+    let gfds = getPossibleGFDs(parseFloat(current.value), parseFloat(max.value));
+    for (let i in gfds) {
+        gfds[i] = spells[gfds[i]].name;
+    }
+    gfdOutcomesList.innerHTML = '(' + gfds.length + ') ' + (gfds.length?gfds.join(', '):'cannot cast');
+}
+
 function recalcMult() {
     window.mult = 1 - (si.checked ? 0.1 : 0) - (rb.checked ? 0.01 : 0);
     return window.mult;
@@ -24,7 +45,7 @@ function getCost(spell, max, mult) {
     return Math.floor((spells[spell].percent * 0.01 * max + spells[spell].base) * mult);
 }
 
-const magicAbsMax = 200;
+let magicAbsMax = 200;
 
 function getPossibleGFDs(current, max) {
     const gfdCost = 3 + Math.floor(0.05 * max);
@@ -44,6 +65,34 @@ function getOutcome(num, cur, max) {
     const GFD = getPossibleGFDs(cur, max);
     if (!GFD.length) { return false; }
     return GFD[Math.floor(num * GFD.length)];
+}
+function tryTransmuteTo(num, cur, outcome) {
+    for (let i = cur; i < magicAbsMax; i++) {
+        const GFDList = getPossibleGFDs(cur, i);
+        if (GFDList[Math.floor(num * GFDList.length)] == outcome) {
+            return i;
+        }
+    }
+    return false;
+}
+function tryTransmuteToRange(num, min, max, outcome) {
+    if (isNaN(num)) { return 'invalid'; }
+    for (let i = min; i < max; i++) {
+        const result = tryTransmuteTo(num, i, outcome);
+        if (result !== false) { return [i, result]; }
+    }
+    return false;
+}
+function setTextFromTransmutatonAttempt(result) {
+    if (result == 'invalid') { 
+        desiredOutcomeOutput.innerHTML = 'Invalid inputs!';
+        return;
+    }
+    if (!result) {
+        desiredOutcomeOutput.innerHTML = 'Cannot transmute.';
+        return;
+    }
+    desiredOutcomeOutput.innerHTML = 'Cast at ' + result[0] + ' mana with ' + result[1] + ' max mana.';
 }
 function tryOffsetRefund(num, cur, maxGFD) {
     //given a magic amount "cur" and random number "num", find optimal solution to yield refunds
@@ -69,8 +118,9 @@ function tryOffsetRefund(num, cur, maxGFD) {
     return bestCount;
 }
 function tryOffsetRefunds(num, cur, maxGFD) {
-    //given a magic amount "cur" and random number "num", find optimal solution to yield refunds
+    //given a magic amount "cur" and random number "num", find optimal solutions to yield refunds
     maxGFD = maxGFD ?? Infinity;
+    if (isNaN(num)) { return false; }
     let best = -1;
     let bestCounts = [];
     for (let i = cur; i <= magicAbsMax; i++) {
@@ -84,7 +134,7 @@ function tryOffsetRefunds(num, cur, maxGFD) {
             bestCounts.push(i);
         }
         if (best == -1) {
-            const prevMagicCost = 0.5 * getCost(getOutcome(num, cur, bestCount), bestCount, mult);
+            const prevMagicCost = 0.5 * getCost(getOutcome(num, cur, bestCounts[0]), bestCounts[0], mult);
             const curMagicCost = 0.5 * getCost(outcome, i, mult);
             if (prevMagicCost < curMagicCost) {
                 bestCounts = [i];
@@ -93,7 +143,14 @@ function tryOffsetRefunds(num, cur, maxGFD) {
             }
         }
     }
-    return compileRanges(bestCounts);
+    return { solutions: compileRanges(bestCounts), outcome: (best != -1)?priority[best]:(0.5 * getCost(getOutcome(num, cur, bestCounts[0]), bestCounts[0], mult)) };
+}
+function setTextFromRefundCalc(result) {
+    if (!result) { 
+        refundOutput.innerHTML = 'Invalid inputs!';
+        return;
+    }
+    refundOutput.innerHTML = 'Cast from between ' + result.solutions[0][0] + ' max mana to ' + result.solutions[0][1] + ' max mana, for a ' + (typeof result.outcome == 'string'?spells[result.outcome].name:('resolving cost of ' + result.outcome + ' mana')) + '.';
 }
 function tryOffsetRefundRange(num, range, maxGFD) {
     //given a range [min, max] representing current magic amounts, find the optimal solution(s) to yield refunds
@@ -245,3 +302,5 @@ function getCorrespondingMagicAmounts() {
     }
     return list;
 }
+
+updateAdv();

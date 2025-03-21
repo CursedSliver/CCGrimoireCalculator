@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
         <title>Grimoire Calculator</title>
+        <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -12,7 +13,7 @@
   <input id = "count" type="number" min="1" value="1" onchange="calculateStuff()"></input><br>
   <div id = "manainfo">With those numbers, your maximum mana would be 5, and the lowest maximum mana you could reach would be 5</div>
   Maximum mana:
-  <input id = "maxmana" type="number" min="5" value = "5" onchange="calculateStuff()"></input><br>
+  <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(max.value);calculateStuff();updateAdv();"></input><br>
   <input type="checkbox" id = "SI" onchange="calculateStuff()">
   <label for="SI">Supreme intellect</label><br>
   <input type="checkbox" id = "RB" onchange="calculateStuff()">
@@ -23,7 +24,9 @@
   <input type="checkbox" id = "calcOptimal" onchange="calculateStuff()">
   <label for="calcOptimal">Calculate optimal max magic (up to the set max magic)</label><br>
 
-  <p margin_down = 0px>Gambler's fever dream checks: <br>
+  <br>
+  Gambler's fever dream checks:
+  <p margin_down = 0px style="margin-top: 0px;">
   <input type="checkbox" id = "Buffs" onchange="calculateStuff()">
   <label for="Buffs"> Buffs active</label><br>
   <input type="checkbox" id = "SE" onchange="calculateStuff()">
@@ -50,6 +53,40 @@
   <label for="ACmagicLeft">Magic left after multicast</label><br>
   <button onclick="arbitraryCalc()">Calculate arbitrary multicast</button><br>
   <samp id ="arbitraryCastOutput"></samp>
+
+  <br>
+  Advanced functions:
+  <div class="pE" id = "advConfig" style="margin-top: 0px;">
+    Current mana: 
+    <input id = "curmana" type="number" min="5" value = "5" onchange="updateAdv()"></input><br>
+    Maximum mana:
+    <input id = "maxmana2" type="number" min="5" value = "5" onchange="updateManaWith(max2.value);calculateStuff();updateAdv()"></input><br>
+    Maximum max mana to consider: 
+    <input id = "maxmaxmana" type="number" min="5" value = "200" onchange="magicAbsMax = parseInt(document.getElementById('maxmaxmana').value)"></input><br>
+    Minimum current mana: 
+    <input id = "minmanacur" type="number" min="5" value = "5" onchange="if (parseFloat(maxAllowedMana.value) < parseFloat(minAllowedMana.value)) { maxAllowedMana.value = minAllowedMana.value }"></input><br>
+    Maximum current mana: 
+    <input id = "maxmanacur" type="number" min="5" value = "200" onchange="if (parseFloat(maxAllowedMana.value) < parseFloat(minAllowedMana.value)) { maxAllowedMana.value = minAllowedMana.value }"></input><br>
+    GFD random number:
+    <input id = "gfdRandom" onchange="updateAdv()"></input><br>
+    Try transmute to desired outcome:
+    <div class="pE">
+      <select id = "spellsDropdown"></select><br>
+      <button onclick="setTextFromTransmutatonAttempt(tryTransmuteToRange(parseFloat(gfdRandom.value), parseFloat(minAllowedMana.value), parseFloat(maxAllowedMana.value), spellsDropdown.value))">Attempt</button><br>
+      <div class="pE"><samp id = "desiredOutcomeOutput"></samp></div>
+    </div>
+    Try transmute into refund:
+    <div class="pE">
+      Maximum GFD mana cost: <input id = "GFDMaxForRefund" type="number" min="3" value = "30"></input><br>
+      <button onclick="setTextFromRefundCalc(tryOffsetRefunds(parseFloat(gfdRandom.value), parseInt(current.value), parseInt(GFDMaxForRefund.value)))">Attempt</button><br>
+      <div class="pE"><samp id = "refundOutput"></samp></div>
+    </div>
+  </div>
+  <br>
+  <div class="pE" id = "adv">
+    Possible GFD outcomes:
+    <div id="gfdOutcomesList"></div>
+  </div>
   <script src="js.js"></script>
   <script src="gfdss.js"></script>
 </body>
