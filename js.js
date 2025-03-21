@@ -184,7 +184,7 @@ function calculateStuff(){
     for(const spell in spells){
         let me = spells[spell];
         if(me.customtime){
-            if(calcGFD)spelldisplays[i].innerHTML = me.name+":<br>Mana cost: " + cost(me.base, me.percent/100, maximum)  +"<br>"+ (averageGFDtime(maximum, !buffs, gpoc, edifice, castnum, 0));
+            if(calcGFD)spelldisplays[i].innerHTML = me.name+":<br>Mana cost: " + cost(me.base, me.percent/100, maximum) + '(' + cost(me.base, me.percent/100, maximum) +" from GFD)<br>"+ (averageGFDtime(maximum, !buffs, gpoc, edifice, castnum, 0));
             else spelldisplays[i].innerHTML = me.name+":<br>Not calculating this right now<br> (Due to your settings)";
         }else{
             let output = multiCost(me.base, me.percent, maximum, castnum, minmana, true)
