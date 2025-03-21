@@ -14,9 +14,9 @@
   <div id = "manainfo">With those numbers, your maximum mana would be 5, and the lowest maximum mana you could reach would be 5</div>
   Maximum mana:
   <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(max.value);calculateStuff();updateAdv();"></input><br>
-  <input type="checkbox" id = "SI" onchange="calculateStuff()">
+  <input type="checkbox" id = "SI" onchange="calculateStuff();updateAdv();">
   <label for="SI">Supreme intellect</label><br>
-  <input type="checkbox" id = "RB" onchange="calculateStuff()">
+  <input type="checkbox" id = "RB" onchange="calculateStuff();updateAdv();">
   <label for="RB">Reality bending</label><br>
   <input type="checkbox" id = "gudRegen" onchange="calculateStuff()">
   <label for="gudRegen">Assume maximum mana for regen purposes is always max(100, current mana + 1)   Don't check if you don't know what this means</label><br>
