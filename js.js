@@ -72,6 +72,8 @@ const max2 = document.getElementById("maxmana2");
 const calcBestMagic = document.getElementById("calcOptimal")
 const si = document.getElementById("SI");
 const rb = document.getElementById("RB");
+const si2 = document.getElementById("SI2");
+const rb2 = document.getElementById("RB2");
 const manainfo = document.getElementById("manainfo");
 const st = document.getElementById("Buffs");
 const se = document.getElementById("SE");
@@ -86,6 +88,26 @@ function updateManaWith(value) {
     max.value = value;
     max2.value = value;
 }
+function updateAurasWith(siI, rbI) {
+    si.checked = siI;
+    si2.checked = siI;
+    rb.checked = rbI;
+    rb2.checked = rbI;
+}
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey) {
+        if (e.key.toLowerCase() == 's') {
+            updateAurasWith(!si.checked, rb.checked);
+        } else if (e.key.toLowerCase() == 'r') {
+            updateAurasWith(si.checked, !rb.checked);
+        } else {
+            return; 
+        }
+        calculateStuff();
+        updateAdv();
+        if (dataPoints.length) { redrawAll(); }
+    }
+})
 
 let discount = 1;
 let fasterRegen = false;
@@ -309,4 +331,4 @@ function arbitraryCalc(){
     document.getElementById("arbitraryCastOutput").innerHTML = str.join("<br>")
 }
 
-calculateStuff()
+calculateStuff();

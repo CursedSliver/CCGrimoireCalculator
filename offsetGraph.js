@@ -126,8 +126,13 @@ function annotateData() {
 let additionalDisplayRadius = 3;
 let additionalDisplaySquareSize = 20;
 let upperLeftAnchor = [25, 25];
+let lastHoverX = 0;
+let lastHoverY = 0;
 function updateDataInteractive(x, y) {
     const ctx = offsetGraphInteractiveDisplay.getContext('2d');
+    lastHoverX = x;
+    lastHoverY = y;
+
     x = Math.floor(x / squareSize) + 5; //max magic
     y = magicAbsMax - Math.floor(y / squareSize); //current magic
 
@@ -182,6 +187,7 @@ offsetGraphInteractiveDisplay.addEventListener('mousemove', function(e) {
     updateDataInteractive(posx - offsetGraphInteractiveDisplay.getBoundingClientRect().left, posy - offsetGraphInteractiveDisplay.getBoundingClientRect().top);
 });
 
-function redrawAll() {
+function redrawAll(init) {
     buildData(); drawData(); annotateData();
+    if (!init) { updateDataInteractive(lastHoverX, lastHoverY); }
 }
