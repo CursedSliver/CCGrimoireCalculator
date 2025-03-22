@@ -178,5 +178,3 @@ offsetGraphInteractiveDisplay.addEventListener('mousemove', function(e) {
 
     updateDataInteractive(posx - offsetGraphInteractiveDisplay.getBoundingClientRect().left, posy - offsetGraphInteractiveDisplay.getBoundingClientRect().top);
 })
-
-buildData(); drawData(); annotateData();
