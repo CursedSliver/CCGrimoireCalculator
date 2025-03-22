@@ -3,56 +3,65 @@ const spells ={
         base:2,
         percent:40,
         gfd:true,
-        name:"Conjure Baked Goods"
+        name:"Conjure Baked Goods",
+        icon:[21, 11]
     },
     fthof:{
         base:10,
         percent:60,
         gfd:true,
-        name:"Force the Hand of Fate"
+        name:"Force the Hand of Fate",
+        icon:[22, 11]
     },
     st:{
         base:8,
         percent:20,
         gfd:false,
-        name:"Stretch Time"
+        name:"Stretch Time",
+        icon:[23, 11]
     },
     se:{
         base:20,
         percent:75,
         gfd:false,
-        name:"Spontaneous Edifice"
+        name:"Spontaneous Edifice",
+        icon:[24, 11]
     },
     hc:{
         base:10,
         percent:10,
         gfd:true,
-        name:"Haggler's charm"
+        name:"Haggler's charm",
+        icon:[25, 11]
     },
     scp:{
         base:10,
         percent:20,
         gfd:true,
-        name:"Summon Crafty Pixies"
+        name:"Summon Crafty Pixies",
+        icon:[26, 11]
     },
     gfd:{
         base:3,
         percent:5,
         gfd:false,
         customtime:true,
-        name:"Gambler's fever dream"
+        name:"Gambler's fever dream",
+        icon:[27, 11]
     },
     ra:{
         base:20,
         percent:10,
         gfd:false,
-        name:"Resurrect Abomination"
+        name:"Resurrect Abomination",
+        icon:[28, 11]
     },
     di:{
         base:5,
         percent:20,
         gfd:true,
-        name:"Diminish Ineptitude"
+        name:"Diminish Ineptitude",
+        icon:[29, 11]
     }
 }
 const lvl = document.getElementById("level");

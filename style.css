@@ -12,3 +12,24 @@ div.pE {
     margin-left: 2px;
     border-left: rgb(73, 73, 73) 2px solid;
 }
+#dataAnnotations {
+    display: flex;
+    width: 600px;
+    flex-wrap: wrap;
+}
+div.box {
+    border-radius: 4px;
+    padding: 6px;
+    display: flex;
+    margin: 4px; 
+    border: 1px black solid;
+    justify-content: center;
+    align-items: center;
+}
+div.icon {
+    width: 48px;
+    height: 48px;
+    margin: -10px;
+    background-image: url('icons.png');
+    transform: scale(0.5);
+}

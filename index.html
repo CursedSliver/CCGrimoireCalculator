@@ -87,7 +87,23 @@
     Possible GFD outcomes:
     <div id="gfdOutcomesList"></div>
   </div>
+
+  <br>
+  <button id="offsetVisualOpenButton" onclick="buildData(); drawData(); annotateData(); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
+  <div id="offsetVisualRelated" style="display: none;">
+    <div id="dataAnnotations">
+
+    </div>
+    <div id="offsetGraphContainer">
+      CURRENT MANA (200)<br>
+      <div id="canvasContainer" style="display: inline-block; border: 3px black ridge; width: 588px; height: 588px;">
+        <canvas id="offsetGraphInteractiveDisplay" width="1000" height="1000" style="position: absolute; background: none; z-index: 1;"></canvas>
+        <canvas id="offsetGraph" width="1000" height="1000"></canvas></div><div style="display: inline-block; transform: rotate(90);"> MAX MANA (200)</div>
+    </div>
+  </div>
+  <img id="iconsImg" src="icons.png" style="display:none;" />
   <script src="js.js"></script>
   <script src="gfdss.js"></script>
+  <script src="offsetGraph.js"></script>
 </body>
 </html>
