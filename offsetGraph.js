@@ -43,6 +43,10 @@ function equivalentIndexOf(arr, item) {
 
 function buildData() {
     let configs = [];
+    allGFDConfigs = [
+        [],
+        ['cbg', 'fthof', 'st', 'se', 'hc', 'scp', 'ra', 'di']
+    ];
     for (let i = 5; i <= magicAbsMax; i++) {
         for (let ii = i; ii < 200; ii++) {
             const gfd = getPossibleGFDs(i, ii);
@@ -52,13 +56,13 @@ function buildData() {
     }
     configs.splice(equivalentIndexOf(configs, []), 1);
     configs.splice(equivalentIndexOf(configs, ['cbg', 'fthof', 'st', 'se', 'hc', 'scp', 'ra', 'di']), 1);
+    const l = configs.length;
     loop:
-    for (let i = 0; i < configs.length; i++) {
+    for (let i = 0; i < l; i++) {
         for (let ii = 0; ii < configs.length; ii++) {
             if (configs[ii].length == allGFDConfigs[allGFDConfigs.length - 1].length) { 
                 allGFDConfigs.push(configs[ii]);
                 configs.splice(ii, 1);
-                if (ii <= i) { i--; }
                 continue loop;
             }
         }
@@ -66,7 +70,6 @@ function buildData() {
             if (configs[ii].length == allGFDConfigs[allGFDConfigs.length - 1].length - 1) { 
                 allGFDConfigs.push(configs[ii]);
                 configs.splice(ii, 1);
-                if (ii <= i) { i--; }
                 continue loop;
             }
         }
@@ -114,7 +117,7 @@ function annotateData() {
         for (let ii in allGFDConfigs[i]) {
             str += '<div class="icon" style="background-position: -' + (spells[allGFDConfigs[i][ii]].icon[0] * 48) + 'px -' + (spells[allGFDConfigs[i][ii]].icon[1] * 48) + 'px;"></div>'; 
         }
-        str += '</div>'
+        str += '</div>';
     }
 
     dataAnnotations.innerHTML = str;
@@ -177,4 +180,8 @@ offsetGraphInteractiveDisplay.addEventListener('mousemove', function(e) {
     }
 
     updateDataInteractive(posx - offsetGraphInteractiveDisplay.getBoundingClientRect().left, posy - offsetGraphInteractiveDisplay.getBoundingClientRect().top);
-})
+});
+
+function redrawAll() {
+    buildData(); drawData(); annotateData();
+}

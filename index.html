@@ -14,9 +14,9 @@
   <div id = "manainfo">With those numbers, your maximum mana would be 5, and the lowest maximum mana you could reach would be 5</div>
   Maximum mana:
   <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(max.value);calculateStuff();updateAdv();"></input><br>
-  <input type="checkbox" id = "SI" onchange="calculateStuff();updateAdv();">
+  <input type="checkbox" id = "SI" onchange="calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
   <label for="SI">Supreme intellect</label><br>
-  <input type="checkbox" id = "RB" onchange="calculateStuff();updateAdv();">
+  <input type="checkbox" id = "RB" onchange="calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
   <label for="RB">Reality bending</label><br>
   <input type="checkbox" id = "gudRegen" onchange="calculateStuff()">
   <label for="gudRegen">Assume maximum mana for regen purposes is always max(100, current mana + 1)   Don't check if you don't know what this means</label><br>
@@ -89,7 +89,7 @@
   </div>
 
   <br>
-  <button id="offsetVisualOpenButton" onclick="buildData(); drawData(); annotateData(); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
+  <button id="offsetVisualOpenButton" onclick="redrawAll(); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
   <div id="offsetVisualRelated" style="display: none;">
     <div id="dataAnnotations">
 
