@@ -140,8 +140,27 @@ function updateDataInteractive(x, y) {
 
     ctx.clearRect(0, 0, offsetGraph.width, offsetGraph.height);
 
+    ctx.fillStyle = 'rgba(102, 102, 102, 0.21)';
+    for (let i = 50; i < magicAbsMax; i += 50) {
+        ctx.fillRect(0, i * squareSize - 1, offsetGraph.width, 1);
+        ctx.fillRect((i - 5) * squareSize - 1, 0, 1, offsetGraph.height);
+    }
+    ctx.fillStyle = 'white';
+    let count = 0;
+    for (let i of [5, 10, 50]) {
+        for (let ii = i; ii < magicAbsMax; ii += i) {
+            const longSide = 5 * (2 ** count);
+            const shortSide = 2 + count;
+            ctx.fillRect(0, ii * squareSize - shortSide / 2, longSide, shortSide);
+            ctx.fillRect((ii - 5) * squareSize - shortSide / 2, 0, shortSide, longSide);
+        }
+        count++;
+    }
+
     ctx.fillStyle = 'white';
     ctx.fillRect(upperLeftAnchor[0] - 5, upperLeftAnchor[1] - 5, dim + 10, dim + 10);
+    ctx.fillStyle = 'black';
+    ctx.fillRect(upperLeftAnchor[0] - 2, upperLeftAnchor[1] - 2, dim + 4, dim + 4);
     //dont ask me how this works
     for (let i = -additionalDisplayRadius; i <= additionalDisplayRadius; i++) { //y
         for (let ii = -additionalDisplayRadius; ii <= additionalDisplayRadius; ii++) { //x
@@ -152,6 +171,11 @@ function updateDataInteractive(x, y) {
             }
             ctx.fillRect(upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, additionalDisplaySquareSize);
         }
+    }
+    ctx.fillStyle = 'rgba(102, 102, 102, 0.21)';
+    for (let i = 1; i <= additionalDisplayRadius * 2; i++) {
+        ctx.fillRect(upperLeftAnchor[0], upperLeftAnchor[1] + i * additionalDisplaySquareSize - 1, dim, 2);
+        ctx.fillRect(upperLeftAnchor[0] + i * additionalDisplaySquareSize - 1, upperLeftAnchor[1], 2, dim);
     }
     ctx.fillStyle = 'red';
     ctx.fillRect(upperLeftAnchor[0] + additionalDisplayRadius * additionalDisplaySquareSize - 2, upperLeftAnchor[1], 4, dim);
