@@ -49,8 +49,8 @@ function getCost(spell, max, mult) {
 let magicAbsMax = 200;
 
 function getPossibleGFDs(current, max) {
-    const gfdCost = 3 + Math.floor(0.05 * max);
     recalcMult();
+    const gfdCost = Math.floor(3 + 0.05 * max) * mult;
     let pool = [];
     for (let i in spells) {
         if (i == 'gfd') { continue; }
