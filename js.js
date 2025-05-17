@@ -95,7 +95,7 @@ function updateAurasWith(siI, rbI) {
     rb2.checked = rbI;
 }
 document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey) {
+    if (e.shiftKey) {
         if (e.key.toLowerCase() == 's') {
             updateAurasWith(!si.checked, rb.checked);
         } else if (e.key.toLowerCase() == 'r') {

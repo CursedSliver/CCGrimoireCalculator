@@ -41,18 +41,24 @@ function equivalentIndexOf(arr, item) {
     return -1;
 }
 
+function addConfigs(configsArr, mult) {
+    for (let i = 5; i <= magicAbsMax; i++) {
+        for (let ii = i; ii < 200; ii++) {
+            const gfd = getPossibleGFDs(i, ii, mult);
+            if (equivalentIndexOf(configsArr, gfd) != -1) { continue; }
+            configsArr.push(gfd);
+        }
+    }
+}
+
 function buildData() {
     let configs = [];
     allGFDConfigs = [
         [],
         ['cbg', 'fthof', 'st', 'se', 'hc', 'scp', 'ra', 'di']
     ];
-    for (let i = 5; i <= magicAbsMax; i++) {
-        for (let ii = i; ii < 200; ii++) {
-            const gfd = getPossibleGFDs(i, ii);
-            if (equivalentIndexOf(configs, gfd) != -1) { continue; }
-            configs.push(gfd);
-        }
+    for (let i = 0; i < 4; i++) {
+        addConfigs(configs, 1 - ((i % 2 == 1)?0.1:0) - ((i >= 2)?0.01:0));
     }
     configs.splice(equivalentIndexOf(configs, []), 1);
     configs.splice(equivalentIndexOf(configs, ['cbg', 'fthof', 'st', 'se', 'hc', 'scp', 'ra', 'di']), 1);
@@ -88,24 +94,65 @@ function buildData() {
                 dataPoints[i].push(null); 
                 continue; 
             }
-            dataPoints[i].push(equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii)));
+            dataPoints[i].push(
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 1)) + 
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.9)) * 100 + 
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.99)) * 10000 +
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.89)) * 1000000  
+            );
         }
     }
 }
 
-const squareSize = 3;
+const scaleFactor = 3;
+const squareSize = 4 * scaleFactor;
+function drawCrate(ctx, topLeftX, topLeftY, size, colors) {
+    const corners = [
+        { x: topLeftX, y: topLeftY },   
+        { x: topLeftX + size, y: topLeftY },    
+        { x: topLeftX + size, y: topLeftY + size },   
+        { x: topLeftX, y: topLeftY + size }  
+    ];
+
+    const center = { x: topLeftX + size / 2, y: topLeftY + size / 2 }
+
+    for (let i = 0; i < 4; i++) {
+        const c1 = corners[i];
+        const c2 = corners[(i + 1) % 4];
+        ctx.beginPath();
+        ctx.moveTo(center.x, center.y);
+        ctx.lineTo(c1.x, c1.y);
+        ctx.lineTo(c2.x, c2.y);
+        ctx.closePath();
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+    }
+}
 function drawData() {
     const ctx = offsetGraph.getContext('2d');
     ctx.fillStyle = 'black';
-    offsetGraph.width = (201 - 5) * squareSize; offsetGraphInteractiveDisplay.width = offsetGraph.width; canvasContainer.style.width = offsetGraph.width;
-    offsetGraph.height = (201 - 5) * squareSize; offsetGraphInteractiveDisplay.height = offsetGraph.height; canvasContainer.style.height = offsetGraph.height;
-    const width = offsetGraph.width;
+    const dim = (201 - 5) * squareSize;
+    offsetGraph.width = dim; offsetGraph.style.width = dim / scaleFactor; offsetGraphInteractiveDisplay.width = dim; canvasContainer.style.width = dim / scaleFactor;
+    offsetGraph.height = dim; offsetGraph.style.height = dim / scaleFactor;  offsetGraphInteractiveDisplay.height = offsetGraph.height; canvasContainer.style.height = offsetGraph.height / scaleFactor;
+    const width = dim;
     const height = offsetGraph.height;
     ctx.fillRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = false;
     for (let i = 5; i <= magicAbsMax; i++) {
         for (let ii = i; ii <= magicAbsMax; ii++) {
-            ctx.fillStyle = colors[dataPoints[i][ii]];
-            ctx.fillRect((ii - 5) * squareSize, height - (i - 5) * squareSize, squareSize, squareSize);
+            //right = si, bottom = rb, left = sirb
+            //ctx.fillStyle = colors[dataPoints[i][ii]];
+            const c = [
+                colors[Math.floor((dataPoints[i][ii] / 100 - Math.floor(dataPoints[i][ii] / 100)) * 100)],
+                colors[Math.floor((dataPoints[i][ii] / 10000 - Math.floor(dataPoints[i][ii] / 10000)) * 100)],
+                colors[Math.floor((dataPoints[i][ii] / 1000000 - Math.floor(dataPoints[i][ii] / 1000000)) * 100)],
+                colors[Math.floor((dataPoints[i][ii] / 100000000 - Math.floor(dataPoints[i][ii] / 100000000)) * 100)]
+            ];
+            drawCrate(ctx, (ii - 5) * squareSize, 
+                height - (i - 5) * squareSize, 
+                squareSize, c
+            );
+            //ctx.fillRect((ii - 5) * squareSize, height - (i - 5) * squareSize, squareSize, squareSize);
         }
     }
 }
@@ -123,13 +170,22 @@ function annotateData() {
     dataAnnotations.innerHTML = str;
 }
 
-let additionalDisplayRadius = 3;
-let additionalDisplaySquareSize = 20;
-let upperLeftAnchor = [25, 25];
+const additionalDisplayRadius = 3;
+const additionalDisplaySquareSize = 30 * scaleFactor;
+const upperLeftAnchor = [25 * scaleFactor, 25 * scaleFactor];
+const sirbConfigIcons = [
+    [5, 10],
+    [34, 25],
+    [32, 25],
+    [10, 25]
+];
 let lastHoverX = 0;
 let lastHoverY = 0;
 function updateDataInteractive(x, y) {
     const ctx = offsetGraphInteractiveDisplay.getContext('2d');
+    x *= scaleFactor;
+    y *= scaleFactor;
+
     lastHoverX = x;
     lastHoverY = y;
 
@@ -158,18 +214,24 @@ function updateDataInteractive(x, y) {
     }
 
     ctx.fillStyle = 'white';
-    ctx.fillRect(upperLeftAnchor[0] - 5, upperLeftAnchor[1] - 5, dim + 10, dim + 10);
+    ctx.fillRect(upperLeftAnchor[0] - 5 * scaleFactor, upperLeftAnchor[1] - 5 * scaleFactor, dim + 10 * scaleFactor, dim + 10 * scaleFactor);
     ctx.fillStyle = 'black';
-    ctx.fillRect(upperLeftAnchor[0] - 2, upperLeftAnchor[1] - 2, dim + 4, dim + 4);
+    ctx.fillRect(upperLeftAnchor[0] - 2 * scaleFactor, upperLeftAnchor[1] - 2 * scaleFactor, dim + 4 * scaleFactor, dim + 4 * scaleFactor);
     //dont ask me how this works
     for (let i = -additionalDisplayRadius; i <= additionalDisplayRadius; i++) { //y
         for (let ii = -additionalDisplayRadius; ii <= additionalDisplayRadius; ii++) { //x
             if ((dataPoints[y + ii] ?? -1) === -1 || (dataPoints[y + ii][x + i] ?? -1) === -1) { 
                 ctx.fillStyle = 'black';
+                ctx.fillRect(upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, additionalDisplaySquareSize);
             } else {
-                ctx.fillStyle = colors[dataPoints[y + ii][x + i]];
+                const c = [
+                    colors[Math.floor((dataPoints[y + ii][x + i] / 100 - Math.floor(dataPoints[y + ii][x + i] / 100)) * 100)],
+                    colors[Math.floor((dataPoints[y + ii][x + i] / 10000 - Math.floor(dataPoints[y + ii][x + i] / 10000)) * 100)],
+                    colors[Math.floor((dataPoints[y + ii][x + i] / 1000000 - Math.floor(dataPoints[y + ii][x + i] / 1000000)) * 100)],
+                    colors[Math.floor((dataPoints[y + ii][x + i] / 100000000 - Math.floor(dataPoints[y + ii][x + i] / 100000000)) * 100)]
+                ];
+                drawCrate(ctx,upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, c);
             }
-            ctx.fillRect(upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, additionalDisplaySquareSize);
         }
     }
     ctx.fillStyle = 'rgba(102, 102, 102, 0.21)';
@@ -178,26 +240,38 @@ function updateDataInteractive(x, y) {
         ctx.fillRect(upperLeftAnchor[0] + i * additionalDisplaySquareSize - 1, upperLeftAnchor[1], 2, dim);
     }
     ctx.fillStyle = 'red';
-    ctx.fillRect(upperLeftAnchor[0] + additionalDisplayRadius * additionalDisplaySquareSize - 2, upperLeftAnchor[1], 4, dim);
-    ctx.fillRect(upperLeftAnchor[0] + additionalDisplayRadius * additionalDisplaySquareSize + additionalDisplaySquareSize - 2, upperLeftAnchor[1], 4, dim);
-    ctx.fillRect(upperLeftAnchor[0], upperLeftAnchor[1] + additionalDisplayRadius * additionalDisplaySquareSize - 2, dim, 4);
-    ctx.fillRect(upperLeftAnchor[0], upperLeftAnchor[1] + additionalDisplayRadius * additionalDisplaySquareSize + additionalDisplaySquareSize - 2, dim, 4);
+    ctx.fillRect(upperLeftAnchor[0] + additionalDisplayRadius * additionalDisplaySquareSize - 2, upperLeftAnchor[1], 3 * scaleFactor, dim);
+    ctx.fillRect(upperLeftAnchor[0] + additionalDisplayRadius * additionalDisplaySquareSize + additionalDisplaySquareSize - 2, upperLeftAnchor[1], 3 * scaleFactor, dim);
+    ctx.fillRect(upperLeftAnchor[0], upperLeftAnchor[1] + additionalDisplayRadius * additionalDisplaySquareSize - 2, dim, 3 * scaleFactor);
+    ctx.fillRect(upperLeftAnchor[0], upperLeftAnchor[1] + additionalDisplayRadius * additionalDisplaySquareSize + additionalDisplaySquareSize - 2, dim, 3 * scaleFactor);
 
-    ctx.font = 'bold 18px serif';
+    ctx.font = 'bold ' + (18 * scaleFactor) + 'px serif';
     ctx.fillStyle = 'white';
     if (y > x) { 
-        ctx.fillText('Invalid tile!', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30);
+        ctx.fillText('Invalid tile!', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
         return; 
     }
 
-    ctx.fillText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30);
+    ctx.fillText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
 
-    const config = allGFDConfigs[dataPoints[y][x]];
-    if (!config.length) { ctx.fillText('(none)', upperLeftAnchor[0] + dim + 18, upperLeftAnchor[1] + 18); return; }
-    for (let i = 0; i < config.length; i++) {
-        ctx.drawImage(iconsImg, spells[config[i]].icon[0] * 48, spells[config[i]].icon[1] * 48, 48, 48, upperLeftAnchor[0] + dim + 18 + i * 36, upperLeftAnchor[1], 30, 30);
+    //const config = allGFDConfigs[dataPoints[y][x]];
+    //if (!config.length) { ctx.fillText('(none)', upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + 18 * scaleFactor); return; }
+    for (let i = 1; i <= 4; i++) {
+        const config = allGFDConfigs[Math.floor((dataPoints[y][x] / (100 ** i) - Math.floor(dataPoints[y][x] / (100 ** i))) * 100)];
+        //console.log(config, dataPoints[y][x]);
+        let indicator = ['#333333', '#333333', '#333333', '#333333'];
+        indicator[i - 1] = colors[equivalentIndexOf(allGFDConfigs, config)];
+        drawCrate(ctx, upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + (i - 1) * 36 * scaleFactor, 24 * scaleFactor, indicator);
+        ctx.drawImage(iconsImg, sirbConfigIcons[i - 1][0] * 48, sirbConfigIcons[i - 1][1] * 48, 48, 48, upperLeftAnchor[0] + dim + 48 * scaleFactor, upperLeftAnchor[1] - 3 * scaleFactor + 36 * (i - 1) * scaleFactor, 30 * scaleFactor, 30 * scaleFactor);
+
+        ctx.fillStyle = 'white';
+        if (!config.length) { ctx.fillText('(none)', upperLeftAnchor[0] + dim + 84 * scaleFactor, upperLeftAnchor[1] + 18 * scaleFactor + (i - 1) * 36 * scaleFactor); continue; }
+        ctx.fillText(config.length, upperLeftAnchor[0] + dim + 84 * scaleFactor, upperLeftAnchor[1] + 18 * scaleFactor + (i - 1) * 36 * scaleFactor);
+        for (let ii = 0; ii < config.length; ii++) {
+            ctx.drawImage(iconsImg, spells[config[ii]].icon[0] * 48, spells[config[ii]].icon[1] * 48, 48, 48, upperLeftAnchor[0] + dim + 100 * scaleFactor + ii * 30 * scaleFactor, upperLeftAnchor[1] + 36 * (i - 1) * scaleFactor, 24 * scaleFactor, 24 * scaleFactor);
+        }
     }
-    ctx.fillText(config.length + ' spell' + (config.length > 1?'s':'') + ' total', upperLeftAnchor[0] + dim + 18, upperLeftAnchor[1] + 48);
+    //ctx.fillText(config.length + ' spell' + (config.length > 1?'s':'') + ' total', upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + 48 * scaleFactor);
 }
 offsetGraphInteractiveDisplay.addEventListener('mousemove', function(e) {
     //insane orteil code
@@ -215,3 +289,11 @@ function redrawAll(init) {
     buildData(); drawData(); annotateData();
     if (!init) { updateDataInteractive(lastHoverX, lastHoverY); }
 }
+
+document.querySelectorAll('input[type=number]').forEach(input => {
+    input.addEventListener('wheel', function (event) {
+        if (document.activeElement === this) {
+            event.preventDefault();
+        }
+    });
+});

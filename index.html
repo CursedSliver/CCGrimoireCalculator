@@ -15,9 +15,9 @@
   Maximum mana:
   <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(max.value);calculateStuff();updateAdv();"></input><br>
   <input type="checkbox" id = "SI" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-  <label for="SI">Supreme intellect (Ctrl + S)</label><br>
+  <label for="SI">Supreme intellect (Shift + S)</label><br>
   <input type="checkbox" id = "RB" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-  <label for="RB">Reality bending (Ctrl + R)</label><br>
+  <label for="RB">Reality bending (Shift + R)</label><br>
   <input type="checkbox" id = "gudRegen" onchange="calculateStuff()">
   <label for="gudRegen">Assume maximum mana for regen purposes is always max(100, current mana + 1)   Don't check if you don't know what this means</label><br>
   <br>
@@ -94,19 +94,19 @@
     <div id="dataAnnotations">
 
     </div>
-    This is affected by your SI/RB settings!
-    <div class="pE">
+    <div class="pE" style="display: none;">
       <input type="checkbox" id = "SI2" onchange="updateAurasWith(si2.checked, rb2.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-      <label for="SI2">Supreme intellect (Ctrl + S)</label><br>
+      <label for="SI2">Supreme intellect (Shift + S)</label><br>
       <input type="checkbox" id = "RB2" onchange="updateAurasWith(si2.checked, rb2.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-      <label for="RB2">Reality bending (Ctrl + R)</label><br>
+      <label for="RB2">Reality bending (Shift + R)</label><br>
       (the above is synced with the other checkboxes)
     </div>
+    (dragon cookie icon = SI + RB)
     <div id="offsetGraphContainer">
       CURRENT MANA (200)<br>
-      <div id="canvasContainer" style="display: inline-block; border: 3px black ridge; width: 588px; height: 588px;">
-        <canvas id="offsetGraphInteractiveDisplay" width="1000" height="1000" style="position: absolute; background: none; z-index: 1;"></canvas>
-        <canvas id="offsetGraph" width="1000" height="1000"></canvas></div><div style="display: inline-block; transform: rotate(90);"> MAX MANA (200)</div>
+      <div id="canvasContainer" style="display: inline-block; border: 3px black ridge;">
+        <canvas id="offsetGraphInteractiveDisplay" width="1000" height="1000" style="position: absolute; background: none; z-index: 1; width: 784px; height: 784px;"></canvas>
+        <canvas id="offsetGraph" width="1000" height="1000" style="width: 784px; height: 784px;"></canvas></div><div style="display: inline-block; transform: rotate(90);"> MAX MANA (200)</div>
     </div>
   </div>
   <img id="iconsImg" src="icons.png" style="display:none;" />

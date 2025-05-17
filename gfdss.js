@@ -48,13 +48,14 @@ function getCost(spell, max, mult) {
 
 let magicAbsMax = 200;
 
-function getPossibleGFDs(current, max) {
+function getPossibleGFDs(current, max, multNew) {
     recalcMult();
-    const gfdCost = Math.floor(3 + 0.05 * max) * mult;
+    const m = multNew ?? mult;
+    const gfdCost = Math.floor((3 + 0.05 * max) * m);
     let pool = [];
     for (let i in spells) {
         if (i == 'gfd') { continue; }
-        if (gfdCost + 0.5 * (Math.floor((spells[i].percent * 0.01 * max + spells[i].base) * mult)) <= current) {
+        if (gfdCost + 0.5 * (Math.floor((spells[i].percent * 0.01 * max + spells[i].base) * m)) <= current) {
             pool.push(i);
         }
     }
