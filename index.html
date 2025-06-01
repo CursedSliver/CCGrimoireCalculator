@@ -91,6 +91,8 @@
   <br>
   <button id="offsetVisualOpenButton" onclick="redrawAll(true); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
   <div id="offsetVisualRelated" style="display: none;">
+    Shows what you can get from GFD from certain magic ranges with or without Supreme Intellect or Reality Bending. You can hover over them to zoom in, and each highlightable square represents a magic amount compared to some max magic amount; each of the four aura possibilities (neither, SI, RB, or SI + RB) occupy a side in each square.
+    <br>The dragon cookie icon represents both SI and RB active.
     <div id="dataAnnotations">
 
     </div>
@@ -101,7 +103,6 @@
       <label for="RB2">Reality bending (Shift + R)</label><br>
       (the above is synced with the other checkboxes)
     </div>
-    (dragon cookie icon = SI + RB)
     <div id="offsetGraphContainer">
       CURRENT MANA (200)<br>
       <div id="canvasContainer" style="display: inline-block; border: 3px black ridge;">
