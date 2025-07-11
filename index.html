@@ -13,7 +13,7 @@
   <input id = "count" type="number" min="1" value="1" onchange="calculateStuff()"></input><br>
   <div id = "manainfo">With those numbers, your maximum mana would be 5, and the lowest maximum mana you could reach would be 5</div>
   Maximum mana:
-  <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(max.value);calculateStuff();updateAdv();"></input><br>
+  <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(this.value);calculateStuff();updateAdv();"></input><br>
   <input type="checkbox" id = "SI" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
   <label for="SI">Supreme intellect (Shift + S)</label><br>
   <input type="checkbox" id = "RB" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
@@ -60,7 +60,7 @@
     Current mana: 
     <input id = "curmana" type="number" min="5" value = "5" onchange="calculateStuff();updateAdv();"></input><br>
     Maximum mana:
-    <input id = "maxmana2" type="number" min="5" value = "5" onchange="updateManaWith(max2.value);calculateStuff();updateAdv()"></input><br>
+    <input id = "maxmana2" type="number" min="5" value = "5" onchange="updateManaWith(this.value);calculateStuff();updateAdv()"></input><br>
     Maximum max mana to consider: 
     <input id = "maxmaxmana" type="number" min="5" value = "200" onchange="magicAbsMax = parseInt(document.getElementById('maxmaxmana').value)"></input><br>
     Minimum current mana: 
