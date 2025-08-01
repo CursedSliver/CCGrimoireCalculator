@@ -17,6 +17,10 @@ div.pE {
     width: 600px;
     flex-wrap: wrap;
 }
+#squareSizeSelector {
+    padding: 3px;
+    margin: 7px;
+}
 div.box {
     border-radius: 4px;
     padding: 6px;

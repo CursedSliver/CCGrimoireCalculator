@@ -46,7 +46,7 @@ function getCost(spell, max, mult) {
     return Math.floor((spells[spell].percent * 0.01 * max + spells[spell].base) * mult);
 }
 
-let magicAbsMax = 200;
+const magicMaxForGFDSS = 200;
 
 function getPossibleGFDs(current, max, multNew) {
     recalcMult();
@@ -69,7 +69,7 @@ function getOutcome(num, cur, max) {
     return GFD[Math.floor(num * GFD.length)];
 }
 function tryTransmuteTo(num, cur, outcome) {
-    for (let i = cur; i < magicAbsMax; i++) {
+    for (let i = cur; i < magicMaxForGFDSS; i++) {
         const GFDList = getPossibleGFDs(cur, i);
         if (GFDList[Math.floor(num * GFDList.length)] == outcome) {
             return i;
@@ -101,7 +101,7 @@ function tryOffsetRefund(num, cur, maxGFD) {
     maxGFD = maxGFD ?? Infinity;
     let best = -1;
     let bestCount = cur;
-    for (let i = cur; i <= magicAbsMax; i++) {
+    for (let i = cur; i <= magicMaxForGFDSS; i++) {
         if (getCost('gfd', i, mult) > maxGFD) { break; }
         const outcome = getOutcome(num, cur, i);
         if (!outcome) { continue; }
@@ -125,7 +125,7 @@ function tryOffsetRefunds(num, cur, maxGFD) {
     if (isNaN(num)) { return false; }
     let best = -1;
     let bestCounts = [];
-    for (let i = cur; i <= magicAbsMax; i++) {
+    for (let i = cur; i <= magicMaxForGFDSS; i++) {
         if (getCost('gfd', i, mult) > maxGFD) { break; }
         const outcome = getOutcome(num, cur, i);
         if (!outcome) { continue; }
@@ -193,7 +193,7 @@ function tryOffsetMinimizeCost(num, cur) {
     const mult = 1 - (si.checked ? 0.1 : 0) - (rb.checked ? 0.01 : 0);
     let bestCounts = [];
     let bestResult = Infinity;
-    for (let i = cur; i <= magicAbsMax; i++) {
+    for (let i = cur; i <= magicMaxForGFDSS; i++) {
         const outcome = getOutcome(num, cur, i);
         if (!outcome) { continue; }
         const cost = getCost('gfd', i, mult) + 0.5 * getCost(outcome, i, mult);
@@ -235,7 +235,7 @@ function computePossibleConfigs(spell) {
     let possibleConfigs = [
         ['cbg', 'fthof', 'st', 'se', 'hc', 'scp', 'ra', 'di']
     ]
-    for (let i = 5; i <= magicAbsMax; i++) {
+    for (let i = 5; i <= magicMaxForGFDSS; i++) {
         loop:
         for (let ii = 5; ii <= i; ii++) {
             const GFD = getPossibleGFDs(ii, i);
@@ -273,7 +273,7 @@ function getCorrespondingMagicAmounts() {
     for (let i in possibleRAConfigs) {
         list[i] = { config: possibleRAConfigs[i] };
         const pos = list[i];
-        for (let ii = 5; ii <= magicAbsMax; ii++) {
+        for (let ii = 5; ii <= magicMaxForGFDSS; ii++) {
             let begin = 0;
             let last = false;
             for (let iii = 5; iii <= ii; iii++) {

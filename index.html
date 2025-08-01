@@ -89,7 +89,7 @@
   </div>
 
   <br>
-  <button id="offsetVisualOpenButton" onclick="redrawAll(true); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
+  <button id="offsetVisualOpenButton" onclick="redrawAll(true); rescale(8); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
   <div id="offsetVisualRelated" style="display: none;">
     Shows what you can get from GFD from certain magic ranges with or without Supreme Intellect or Reality Bending. You can hover over them to zoom in, and each highlightable square represents a magic amount compared to some max magic amount; each of the four aura possibilities (neither, SI, RB, or SI + RB) occupy a side in each square.
     <br>The dragon cookie icon represents both SI and RB active.
@@ -104,10 +104,21 @@
       (the above is synced with the other checkboxes)
     </div>
     <div id="offsetGraphContainer">
-      CURRENT MANA (200)<br>
+      <div id="squareSizeSelector" class="pE">
+        <label for="scalingSlider">Amount of squares to show:</label><br>
+        <input type="range" id="scalingSlider" min="1" max="196" step="1" value="98" oninput="document.getElementById('scalingSliderValue').textContent = this.value;">
+        <span id="scalingSliderValue">98</span><br>
+        <label for="xSlider">Max magic at bottom left square: (left and right arrows)</label><br>
+        <input type="range" id="xSlider" min="5" max="103" step="1" value="5" oninput="document.getElementById('xSliderValue').textContent = this.value;">
+        <span id="xSliderValue">5</span><br>
+        <label for="ySlider">Current magic at bottom left square: (up and down arrows)</label><br>
+        <input type="range" id="ySlider" min="5" max="103" step="1" value="5" oninput="document.getElementById('ySliderValue').textContent = this.value;">
+        <span id="ySliderValue">5</span><br>
+      </div>
       <div id="canvasContainer" style="display: inline-block; border: 3px black ridge;">
         <canvas id="offsetGraphInteractiveDisplay" width="1000" height="1000" style="position: absolute; background: none; z-index: 1; width: 784px; height: 784px;"></canvas>
-        <canvas id="offsetGraph" width="1000" height="1000" style="width: 784px; height: 784px;"></canvas></div><div style="display: inline-block; transform: rotate(90);"> MAX MANA (200)</div>
+        <canvas id="offsetGraph" width="1000" height="1000" style="width: 784px; height: 784px;"></canvas>
+      </div>
     </div>
   </div>
   <img id="iconsImg" src="icons.png" style="display:none;" />
