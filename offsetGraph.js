@@ -153,6 +153,13 @@ function drawData() {
                 height - (i - 5) * squareSize, 
                 squareSize, c
             );
+            /*if (!(Math.floor((point / 100 - Math.floor(point / 100)) * 100) === equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 1)) &&
+                Math.floor((point / 10000 - Math.floor(point / 10000)) * 100) === equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.9)) &&
+                Math.floor((point / 1000000 - Math.floor(point / 1000000)) * 100) === equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.99)) &&
+                Math.floor((point / 100000000 - Math.floor(point / 100000000)) * 100) === equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.89))
+            )) {
+                console.log('WHAT', i, ii)
+            }*/
             //ctx.fillRect((ii - 5) * squareSize, height - (i - 5) * squareSize, squareSize, squareSize);
         }
     }
