@@ -347,10 +347,10 @@ function updateDataInteractive(x, y) {
 
     ctx.strokeText('These are what you can get if you have', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
     ctx.strokeText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 56 * scaleFactor);
-    ctx.strokeText('(' + initialX + ' / ' + initialY + ') to (' + (initialX + magicAbsMax) + ' / ' + (initialY + magicAbsMax) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
+    ctx.strokeText('(' + initialY + ' / ' + initialX + ') to (' + (initialY + magicAbsMax) + ' / ' + (initialX + magicAbsMax) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
     ctx.fillText('These are what you can get if you have', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
     ctx.fillText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 56 * scaleFactor);
-    ctx.fillText('(' + initialX + ' / ' + initialY + ') to (' + (initialX + magicAbsMax) + ' / ' + (initialY + magicAbsMax) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
+    ctx.fillText('(' + initialY + ' / ' + initialX + ') to (' + (initialY + magicAbsMax) + ' / ' + (initialX + magicAbsMax) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
 
     //const config = allGFDConfigs[dataPoints[y][x]];
     //if (!config.length) { ctx.fillText('(none)', upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + 18 * scaleFactor); return; }
