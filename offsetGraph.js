@@ -142,11 +142,12 @@ function drawData() {
         for (let ii = i; ii <= magicAbsMax; ii++) {
             //right = si, bottom = rb, left = sirb
             //ctx.fillStyle = colors[dataPoints[i][ii]];
+            const point = dataPoints[i][ii] + 0.000000001;
             const c = [
-                colors[Math.floor((dataPoints[i][ii] / 100 - Math.floor(dataPoints[i][ii] / 100)) * 100)],
-                colors[Math.floor((dataPoints[i][ii] / 10000 - Math.floor(dataPoints[i][ii] / 10000)) * 100)],
-                colors[Math.floor((dataPoints[i][ii] / 1000000 - Math.floor(dataPoints[i][ii] / 1000000)) * 100)],
-                colors[Math.floor((dataPoints[i][ii] / 100000000 - Math.floor(dataPoints[i][ii] / 100000000)) * 100)]
+                colors[Math.floor((point / 100 - Math.floor(point / 100)) * 100)],
+                colors[Math.floor((point / 10000 - Math.floor(point / 10000)) * 100)],
+                colors[Math.floor((point / 1000000 - Math.floor(point / 1000000)) * 100)],
+                colors[Math.floor((point / 100000000 - Math.floor(point / 100000000)) * 100)]
             ];
             drawCrate(ctx, (ii - 5) * squareSize, 
                 height - (i - 5) * squareSize, 
@@ -224,11 +225,12 @@ function updateDataInteractive(x, y) {
                 ctx.fillStyle = 'black';
                 ctx.fillRect(upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, additionalDisplaySquareSize);
             } else {
+                const point = dataPoints[y + ii][x + i] + 0.000000001; //the number is to avoid issues caused by precision loss
                 const c = [
-                    colors[Math.floor((dataPoints[y + ii][x + i] / 100 - Math.floor(dataPoints[y + ii][x + i] / 100)) * 100)],
-                    colors[Math.floor((dataPoints[y + ii][x + i] / 10000 - Math.floor(dataPoints[y + ii][x + i] / 10000)) * 100)],
-                    colors[Math.floor((dataPoints[y + ii][x + i] / 1000000 - Math.floor(dataPoints[y + ii][x + i] / 1000000)) * 100)],
-                    colors[Math.floor((dataPoints[y + ii][x + i] / 100000000 - Math.floor(dataPoints[y + ii][x + i] / 100000000)) * 100)]
+                    colors[Math.floor((point / 100 - Math.floor(point / 100)) * 100)],
+                    colors[Math.floor((point / 10000 - Math.floor(point / 10000)) * 100)],
+                    colors[Math.floor((point / 1000000 - Math.floor(point / 1000000)) * 100)],
+                    colors[Math.floor((point / 100000000 - Math.floor(point / 100000000)) * 100)]
                 ];
                 drawCrate(ctx,upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, c);
             }
@@ -258,7 +260,8 @@ function updateDataInteractive(x, y) {
     //const config = allGFDConfigs[dataPoints[y][x]];
     //if (!config.length) { ctx.fillText('(none)', upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + 18 * scaleFactor); return; }
     for (let i = 1; i <= 4; i++) {
-        const config = allGFDConfigs[Math.floor((dataPoints[y][x] / (100 ** i) - Math.floor(dataPoints[y][x] / (100 ** i))) * 100)];
+        const point = dataPoints[y][x] + 0.000000001; //the number is to avoid issues caused by precision loss
+        const config = allGFDConfigs[Math.floor((point / (100 ** i) - Math.floor(point / (100 ** i))) * 100)];
         //console.log(config, dataPoints[y][x]);
         let indicator = ['#333333', '#333333', '#333333', '#333333'];
         indicator[i - 1] = colors[equivalentIndexOf(allGFDConfigs, config)];
