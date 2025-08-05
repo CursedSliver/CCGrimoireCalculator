@@ -69,7 +69,8 @@ const count = document.getElementById("count");
 const current = document.getElementById("curmana");
 const max = document.getElementById("maxmana");
 const max2 = document.getElementById("maxmana2");
-const calcBestMagic = document.getElementById("calcOptimal")
+const correspondingCount = document.getElementById("correspondingTowerCount");
+const calcBestMagic = document.getElementById("calcOptimal");
 const si = document.getElementById("SI");
 const rb = document.getElementById("RB");
 const si2 = document.getElementById("SI2");
@@ -189,6 +190,21 @@ function multiCost(base, percent, magic, castCount, minMagic, str){
 
 function getMaxMagic(level, count){
     return Math.floor(4+Math.pow(count,0.6)+Math.log((count+(level-1)*10)/15+1)*15);
+}
+function getTowerCountFromMagic(level, magic) {
+    let min = 1;
+    let max = min;
+    for (let i = min; i < 5100; i++) {
+        if (getMaxMagic(level, i) == magic && getMaxMagic(level, i - 1) < magic) { 
+            min = i;
+            continue;
+        }
+        if (getMaxMagic(level, i) > magic) {
+            max = i;
+            break;
+        }
+    }
+    return [min, max]; //bottom inclusive, top exclusive
 }
 function calculateStuff(){   
     

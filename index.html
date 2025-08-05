@@ -13,7 +13,8 @@
   <input id = "count" type="number" min="1" value="1" onchange="calculateStuff()"></input><br>
   <div id = "manainfo">With those numbers, your maximum mana would be 5, and the lowest maximum mana you could reach would be 5</div>
   Maximum mana:
-  <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(this.value);calculateStuff();updateAdv();"></input><br>
+  <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(this.value);calculateStuff();correspondingCount.innerText = getTowerCountFromMagic(parseInt(lvl.value), parseInt(this.value)).join(', '); updateAdv();"></input><br>
+  Corresponding tower counts: [<span id = "correspondingTowerCount">1, 2</span>)<br>
   <input type="checkbox" id = "SI" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
   <label for="SI">Supreme intellect (Shift + S)</label><br>
   <input type="checkbox" id = "RB" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">

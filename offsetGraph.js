@@ -47,7 +47,7 @@ function equivalentIndexOf(arr, item) {
 
 function addConfigs(configsArr, mult) {
     for (let i = 5; i <= magicAbsMax; i++) {
-        for (let ii = i; ii < 200; ii++) {
+        for (let ii = 5; ii < 200; ii++) {
             const gfd = getPossibleGFDs(i, ii, mult);
             if (equivalentIndexOf(configsArr, gfd) != -1) { continue; }
             configsArr.push(gfd);
@@ -90,10 +90,10 @@ function buildData() {
         if (i < 5) { 
             continue; 
         }
-        for (let ii = 0; ii < i; ii++) {
-            dataPoints[i].push(null);
-        }
-        for (let ii = i; ii <= magicAbsMax; ii++) {
+        //for (let ii = 0; ii < i; ii++) {
+        //    dataPoints[i].push(null);
+        //}
+        for (let ii = 0; ii <= magicAbsMax; ii++) {
             if (ii < 5) { 
                 dataPoints[i].push(null); 
                 continue; 
@@ -339,11 +339,11 @@ function updateDataInteractive(x, y) {
     ctx.lineWidth = 3 * scaleFactor;
     ctx.font = 'bold ' + (18 * scaleFactor) + 'px serif';
     ctx.fillStyle = 'white';
-    if (y > x) { 
+    /*if (y > x) { 
         ctx.strokeText('Invalid tile!', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
         ctx.fillText('Invalid tile!', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
         return; 
-    }
+    }*/
 
     ctx.strokeText('These are what you can get if you have', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
     ctx.strokeText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 56 * scaleFactor);
@@ -401,3 +401,75 @@ document.querySelectorAll('input[type=number]').forEach(input => {
         }
     });
 });
+
+
+//14 shiny
+let offset = 0;
+const ranges = {
+    0: 0,
+    0.33333333333333333333333333: 0.15,
+    0.5: 0.25,
+    0.6: 0.5,
+    0.666666666666666666666666666: 1,
+    0.75: 1,
+    0.875: -0.25,
+    1: 0
+} //NEVER MAKE ANY RANGE EXACTLY THE SAME
+const rangeKeys = [0, 0.33333333333333333333333333, 0.5, 0.6, 0.666666666666666666666666666, 0.75, 0.875, 1]
+const threshold = 13;
+const fillerThreshold = 7;
+const backSearchRange = 20;
+function findShinies() {
+    offset = 1e4 + Math.floor(Math.random() * 1e5);
+    let done = false;
+    const seed = Array.from({length: 5}, () => String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('');
+    let prev = 0;
+    let most = 0;
+    for (let i = offset; i < offset + 1e6; i++) {
+        Math.seedrandom(seed+'/'+i);
+        if (i % 100000 == 0) { console.log(i, 'Most points: '+most); }
+        if (Math.random() >= 0.5) { continue; }
+        if (Math.random() >= 0.0001) { continue; }
+
+        let points = 0;
+        let fillerPoints = 0;
+        for (let ii = i - backSearchRange - fillerThreshold; ii < i - backSearchRange; ii++) {
+            Math.seedrandom(seed+'/'+ii);
+            const a = Math.random();
+            if ((a >= 0.25 && a < 0.5) || (a >= 0.75 && a <= 0.875)) {
+                //find 10 +13 magic resolves
+                fillerPoints++;
+            }
+        }
+        if (fillerPoints < fillerThreshold) { 
+            continue;
+        }
+        for (let ii = i - backSearchRange; ii < i; ii++) {
+            Math.seedrandom(seed+'/'+ii);
+            const a = Math.random();
+            for (let iii = 1; iii < rangeKeys.length; iii++) {
+                if (rangeKeys[iii] > a) {
+                    let mult = ((ranges[rangeKeys[iii - 1]] == prev)?3:1) * 0.1 * (backSearchRange - i + ii);
+                    prev = ranges[rangeKeys[iii - 1]];
+                    points += prev * mult;
+                    break;
+                }
+            }
+        }
+        most = Math.max(most, points);
+        if (points < threshold) { continue; }
+        let str = 'Found with ' + points.toFixed(2) + ' points\n';
+        for (let ii = i - 20; ii < i; ii++) {
+            Math.seedrandom(seed+'/'+ii);
+            const a = Math.random();
+            str += a + '\n';
+        }
+        str += 'Seed: ' + seed + '; cast: ' + i;
+        console.log(str);
+        done = true;
+        break;
+    }
+    if (!done) { findShinies(); }
+    Math.seedrandom();
+}
+//findShinies();
