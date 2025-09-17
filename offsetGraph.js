@@ -46,7 +46,7 @@ function equivalentIndexOf(arr, item) {
 }
 
 function addConfigs(configsArr, mult) {
-    for (let i = 5; i <= magicAbsMax; i++) {
+    for (let i = 0; i <= magicAbsMax; i++) {
         for (let ii = 5; ii < 200; ii++) {
             const gfd = getPossibleGFDs(i, ii, mult);
             if (equivalentIndexOf(configsArr, gfd) != -1) { continue; }
@@ -87,9 +87,6 @@ function buildData() {
 
     for (let i = 0; i <= magicAbsMax; i++) {
         dataPoints[i] = [];
-        if (i < 5) { 
-            continue; 
-        }
         //for (let ii = 0; ii < i; ii++) {
         //    dataPoints[i].push(null);
         //}
@@ -112,7 +109,7 @@ const scaleFactor = 3;
 let squareSize = 4 * scaleFactor;
 let initialX = 5;
 let initialY = 5;
-function drawCrate(ctx, topLeftX, topLeftY, size, colors) {
+function drawCrate(ctx, topLeftX, topLeftY, size, colors, stroke) {
     const corners = [
         { x: topLeftX, y: topLeftY },   
         { x: topLeftX + size, y: topLeftY },    
@@ -130,25 +127,32 @@ function drawCrate(ctx, topLeftX, topLeftY, size, colors) {
         ctx.lineTo(c1.x, c1.y);
         ctx.lineTo(c2.x, c2.y);
         ctx.closePath();
-        ctx.fillStyle = colors[i];
-        ctx.fill();
+        if (stroke) {
+            ctx.strokeStyle = colors[i];
+            ctx.stroke();
+        } else {
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+        }
     }
 }
 function drawData() {
     const ctx = offsetGraph.getContext('2d');
     ctx.fillStyle = 'black';
     const dim = (magicAbsMax + 1 - 5) * squareSize;
+    const dimY = dim;
     offsetGraph.width = dim; offsetGraph.style.width = (dim / scaleFactor) + 'px'; offsetGraphInteractiveDisplay.width = dim; offsetGraphInteractiveDisplay.style.width = (dim / scaleFactor) + 'px'; canvasContainer.style.width = (dim / scaleFactor) + 'px';
-    offsetGraph.height = dim; offsetGraph.style.height = (dim / scaleFactor) + 'px';  offsetGraphInteractiveDisplay.height = offsetGraph.height; offsetGraphInteractiveDisplay.style.height = (dim / scaleFactor) + 'px'; canvasContainer.style.height = (offsetGraph.height / scaleFactor) + 'px';
+    offsetGraph.height = dimY; offsetGraph.style.height = (dimY / scaleFactor) + 'px';  offsetGraphInteractiveDisplay.height = offsetGraph.height; offsetGraphInteractiveDisplay.style.height = (dimY / scaleFactor) + 'px'; canvasContainer.style.height = (offsetGraph.height / scaleFactor) + 'px';
     const width = dim;
-    const height = offsetGraph.height;
+    const height = dim;
     ctx.fillRect(0, 0, width, height);
     ctx.imageSmoothingEnabled = false;
     for (let i = initialY; i <= initialY + magicAbsMax - 5; i++) {
         for (let ii = initialX; ii <= initialX + magicAbsMax - 5; ii++) {
             //right = si, bottom = rb, left = sirb
             //ctx.fillStyle = colors[dataPoints[i][ii]];
-            if (i > ii) { continue; }
+            if (i > ii) { ctx.globalAlpha = 0.2; }
+            else { ctx.globalAlpha = 1; }
             const point = dataPoints[i][ii] + 0.000000001;
             const c = [
                 colors[Math.floor((point / 100 - Math.floor(point / 100)) * 100)],
@@ -157,7 +161,7 @@ function drawData() {
                 colors[Math.floor((point / 100000000 - Math.floor(point / 100000000)) * 100)]
             ];
             drawCrate(ctx, (ii - initialX) * squareSize, 
-                height - (i - initialY) * squareSize, 
+                height - (i - initialY) * squareSize - squareSize, 
                 squareSize, c
             );
             /*if (!(Math.floor((point / 100 - Math.floor(point / 100)) * 100) === equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 1)) &&
@@ -228,8 +232,8 @@ document.addEventListener('keydown', function(event) {
             changed = true;
         }
     } else if (event.key === 'ArrowDown') {
-        if (initialY > 5) {
-            initialY = Math.max(initialY - mult, 5);
+        if (initialY > 0) {
+            initialY = Math.max(initialY - mult, 0);
             changed = true;
         }
     } else { 
@@ -267,6 +271,18 @@ const sirbConfigIcons = [
     [32, 25],
     [10, 25]
 ];
+const funnyFrameColorsOverlay = [
+    '#ffffff',
+    '#ffffff',
+    '#ffffff',
+    '#ffffff'
+];
+const funnyFrameColorsBorders = [
+    '#45045fff',
+    '#19045fff',
+    '#45045fff',
+    '#19045fff'
+];
 let lastHoverX = 0;
 let lastHoverY = 0;
 function updateDataInteractive(x, y) {
@@ -279,7 +295,7 @@ function updateDataInteractive(x, y) {
     y *= scaleFactor;
 
     x = Math.floor(x / squareSize) + initialX; //max magic
-    y = magicAbsMax - Math.floor(y / squareSize) + initialY - 4; //current magic
+    y = magicAbsMax - Math.floor(y / squareSize) + initialY - 5; //current magic
     //console.log(x, y)
 
     const dim = (additionalDisplayRadius * 2 + 1) * additionalDisplaySquareSize;
@@ -322,6 +338,9 @@ function updateDataInteractive(x, y) {
                     colors[Math.floor((point / 100000000 - Math.floor(point / 100000000)) * 100)]
                 ];
                 drawCrate(ctx,upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, c);
+                if (y + ii > x + i) { 
+                    drawCrate(ctx,upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, funnyFrameColorsBorders, true);
+                }
             }
         }
     }
@@ -350,7 +369,11 @@ function updateDataInteractive(x, y) {
     ctx.strokeText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 56 * scaleFactor);
     ctx.strokeText('(' + initialY + ' / ' + initialX + ') to (' + (initialY + magicAbsMax) + ' / ' + (initialX + magicAbsMax) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
     ctx.fillText('These are what you can get if you have', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 30 * scaleFactor);
+    if (y > x) {
+        ctx.fillStyle = '#ee1e1eff';
+    }
     ctx.fillText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 56 * scaleFactor);
+    ctx.fillStyle = '#ffffff';
     ctx.fillText('(' + initialY + ' / ' + initialX + ') to (' + (initialY + magicAbsMax - 5) + ' / ' + (initialX + magicAbsMax - 5) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
 
     //const config = allGFDConfigs[dataPoints[y][x]];
