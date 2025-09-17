@@ -91,10 +91,10 @@ function buildData() {
         //    dataPoints[i].push(null);
         //}
         for (let ii = 0; ii <= magicAbsMax; ii++) {
-            if (ii < 5) { 
-                dataPoints[i].push(null); 
-                continue; 
-            }
+            //if (ii < 5) { 
+            //    dataPoints[i].push(null); 
+            //    continue; 
+            //}
             dataPoints[i].push(
                 equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 1)) + 
                 equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.9)) * 100 + 
@@ -217,8 +217,8 @@ document.addEventListener('keydown', function(event) {
     let changed = false;
     const mult = Math.pow(3, Number(event.shiftKey) + Number(event.ctrlKey));
     if (event.key === 'ArrowLeft') {
-        if (initialX > 5) {
-            initialX = Math.max(initialX - mult, 5);
+        if (initialX > 0) {
+            initialX = Math.max(initialX - mult, 0);
             changed = true;
         }
     } else if (event.key === 'ArrowRight') {
@@ -294,6 +294,8 @@ function updateDataInteractive(x, y) {
     x *= scaleFactor;
     y *= scaleFactor;
 
+    let debug = 0;
+
     x = Math.floor(x / squareSize) + initialX; //max magic
     y = magicAbsMax - Math.floor(y / squareSize) + initialY - 5; //current magic
     //console.log(x, y)
@@ -324,6 +326,7 @@ function updateDataInteractive(x, y) {
     ctx.fillStyle = 'black';
     ctx.fillRect(upperLeftAnchor[0] - 2 * scaleFactor, upperLeftAnchor[1] - 2 * scaleFactor, dim + 4 * scaleFactor, dim + 4 * scaleFactor);
     //dont ask me how this works
+    ctx.lineWidth = 2;
     for (let i = -additionalDisplayRadius; i <= additionalDisplayRadius; i++) { //y
         for (let ii = -additionalDisplayRadius; ii <= additionalDisplayRadius; ii++) { //x
             if ((dataPoints[y + ii] ?? -1) === -1 || (dataPoints[y + ii][x + i] ?? -1) === -1) { 
@@ -339,6 +342,7 @@ function updateDataInteractive(x, y) {
                 ];
                 drawCrate(ctx,upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, c);
                 if (y + ii > x + i) { 
+                    //debug++;
                     drawCrate(ctx,upperLeftAnchor[0] + (additionalDisplayRadius + i) * additionalDisplaySquareSize, upperLeftAnchor[1] + (additionalDisplayRadius - ii) * additionalDisplaySquareSize, additionalDisplaySquareSize, funnyFrameColorsBorders, true);
                 }
             }
@@ -374,7 +378,7 @@ function updateDataInteractive(x, y) {
     }
     ctx.fillText(y + ' / ' + x + ' mana', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 56 * scaleFactor);
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('(' + initialY + ' / ' + initialX + ') to (' + (initialY + magicAbsMax - 5) + ' / ' + (initialX + magicAbsMax - 5) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
+    ctx.fillText('(' + initialY + ' / ' + initialX + ') to (' + (initialY + magicAbsMax) + ' / ' + (initialX + magicAbsMax) + ')', upperLeftAnchor[0], upperLeftAnchor[1] + dim + 82 * scaleFactor);
 
     //const config = allGFDConfigs[dataPoints[y][x]];
     //if (!config.length) { ctx.fillText('(none)', upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + 18 * scaleFactor); return; }
@@ -399,6 +403,7 @@ function updateDataInteractive(x, y) {
             ctx.drawImage(iconsImg, spells[config[ii]].icon[0] * 48, spells[config[ii]].icon[1] * 48, 48, 48, upperLeftAnchor[0] + dim + 100 * scaleFactor + ii * 30 * scaleFactor, upperLeftAnchor[1] + 36 * (i - 1) * scaleFactor, 24 * scaleFactor, 24 * scaleFactor);
         }
     }
+    //console.log(debug);
     //ctx.fillText(config.length + ' spell' + (config.length > 1?'s':'') + ' total', upperLeftAnchor[0] + dim + 18 * scaleFactor, upperLeftAnchor[1] + 48 * scaleFactor);
 }
 offsetGraphInteractiveDisplay.addEventListener('mousemove', function(e) {
