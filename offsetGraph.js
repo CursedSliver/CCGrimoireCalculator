@@ -211,24 +211,25 @@ ySlider.addEventListener('change', function(event) {
 });
 document.addEventListener('keydown', function(event) {
     let changed = false;
+    const mult = Math.pow(3, Number(event.shiftKey) + Number(event.ctrlKey));
     if (event.key === 'ArrowLeft') {
         if (initialX > 5) {
-            initialX--;
+            initialX = Math.max(initialX - mult, 5);
             changed = true;
         }
     } else if (event.key === 'ArrowRight') {
         if (initialX < parseInt(xSlider.max)) {
-            initialX++;
+            initialX = Math.min(initialX + mult, parseInt(xSlider.max));
             changed = true;
         }
     } else if (event.key === 'ArrowUp') {
         if (initialY < parseInt(ySlider.max)) {
-            initialY++;
+            initialY = Math.min(initialY + mult, parseInt(ySlider.max));
             changed = true;
         }
     } else if (event.key === 'ArrowDown') {
         if (initialY > 5) {
-            initialY--;
+            initialY = Math.max(initialY - mult, 5);
             changed = true;
         }
     } else { 
