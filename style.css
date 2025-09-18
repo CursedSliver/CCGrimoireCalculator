@@ -14,7 +14,7 @@ div.pE {
 }
 #dataAnnotations {
     display: flex;
-    width: 600px;
+    width: 800px;
     flex-wrap: wrap;
 }
 #squareSizeSelector {

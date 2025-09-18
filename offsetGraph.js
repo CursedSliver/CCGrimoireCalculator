@@ -36,7 +36,8 @@ const colors = [
     `rgb(255, 136, 0)`,
     `rgb(83, 125, 70)`,
     `rgb(139, 72, 111)`
-]
+];
+const allCounts = [];
 
 function equivalentIndexOf(arr, item) {
     for (let i = 0; i < arr.length; i++) {
@@ -84,6 +85,9 @@ function buildData() {
             }
         }
     }
+    for (let i = 0; i < allGFDConfigs.length; i++) {
+        allCounts.push(0);
+    }
 
     for (let i = 0; i <= magicAbsMax; i++) {
         dataPoints[i] = [];
@@ -95,11 +99,21 @@ function buildData() {
             //    dataPoints[i].push(null); 
             //    continue; 
             //}
+            const [a, b, c, d] = [
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 1)), 
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.9)),
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.99)),
+                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.89))
+            ];
+            allCounts[a]++;
+            allCounts[b]++;
+            allCounts[c]++;
+            allCounts[d]++;
             dataPoints[i].push(
-                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 1)) + 
-                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.9)) * 100 + 
-                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.99)) * 10000 +
-                equivalentIndexOf(allGFDConfigs, getPossibleGFDs(i, ii, 0.89)) * 1000000  
+                a + 
+                b * 100 + 
+                c * 10000 +
+                d * 1000000  
             );
         }
     }
@@ -250,12 +264,13 @@ document.addEventListener('keydown', function(event) {
 });
 
 function annotateData() {
-    let str = '<div class="box" style="background: '+colors[0]+'">0 (empty)</div>';
+    let str = '<div class="box" style="background: '+colors[0]+'">0 (cannot cast, <div style="display: inline-block; font-size: 80%;">'+allCounts[0]+'</div>)</div>';
     for (let i = 1; i < allGFDConfigs.length; i++) {
         str += '<div class="box" style="background: '+colors[i]+'">'+allGFDConfigs[i].length;
         for (let ii in allGFDConfigs[i]) {
             str += '<div class="icon" style="background-position: -' + (spells[allGFDConfigs[i][ii]].icon[0] * 48) + 'px -' + (spells[allGFDConfigs[i][ii]].icon[1] * 48) + 'px;"></div>'; 
         }
+        str += '<div style="display: inline-block; font-size: 80%;">(' + allCounts[i] + ')</div>';
         str += '</div>';
     }
 
