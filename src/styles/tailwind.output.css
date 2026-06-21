@@ -201,9 +201,6 @@
   .z-1 {
     z-index: 1;
   }
-  .z-\[1\] {
-    z-index: 1;
-  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -288,12 +285,6 @@
   .h-196 {
     height: calc(var(--spacing) * 196);
   }
-  .h-\[40px\] {
-    height: 40px;
-  }
-  .h-\[784px\] {
-    height: 784px;
-  }
   .h-auto {
     height: auto;
   }
@@ -303,17 +294,8 @@
   .w-20 {
     width: calc(var(--spacing) * 20);
   }
-  .w-50 {
-    width: calc(var(--spacing) * 50);
-  }
   .w-196 {
     width: calc(var(--spacing) * 196);
-  }
-  .w-\[200px\] {
-    width: 200px;
-  }
-  .w-\[784px\] {
-    width: 784px;
   }
   .w-full {
     width: 100%;
@@ -404,10 +386,6 @@
     border-style: var(--tw-border-style);
     border-width: 3px;
   }
-  .border-5 {
-    border-style: var(--tw-border-style);
-    border-width: 5px;
-  }
   .border-ridge {
     border-style: ridge;
   }
@@ -469,10 +447,6 @@
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
   }
-  .text-5xl {
-    font-size: var(--text-5xl);
-    line-height: var(--tw-leading, var(--text-5xl--line-height));
-  }
   .text-lg {
     font-size: var(--text-lg);
     line-height: var(--tw-leading, var(--text-lg--line-height));
@@ -480,10 +454,6 @@
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
-  }
-  .text-xl {
-    font-size: var(--text-xl);
-    line-height: var(--tw-leading, var(--text-xl--line-height));
   }
   .text-\[20px\] {
     font-size: 20px;
