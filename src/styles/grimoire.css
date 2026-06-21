@@ -1,0 +1,276 @@
+/* Grimoire minigame - static visual reproduction styles
+   All selectors are scoped to #native-spell-displays to prevent these
+   global rules (html, body, etc.) from affecting other application
+   components on the page. */
+
+/* ---------------------------------------------------------------------------
+   Scoped base styles (originally applied to html/body / global elements)
+   --------------------------------------------------------------------------- */
+#native-spell-displays,
+#native-spell-displays * {
+    box-sizing: border-box;
+}
+
+#native-spell-displays {
+    position: relative;
+    color: #fff;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 13px;
+    background: #000;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    border:3px solid transparent;
+    border-image:url('../../images/frameBorder.png') 3 round;
+	border-radius:2px;
+	box-shadow:0px 0px 1px 2px rgba(0,0,0,0.5),0px 2px 4px rgba(0,0,0,0.25),0px 0px 6px 1px rgba(0,0,0,0.5) inset;
+	-webkit-transition: opacity 0.1s ease-out;
+	-moz-transition: opacity 0.1s ease-out;
+	-ms-transition: opacity 0.1s ease-out;
+	-o-transition: opacity 0.1s ease-out;
+	transition: opacity 0.1s ease-out;
+}
+
+#native-spell-displays div,
+#native-spell-displays span {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* ---------------------------------------------------------------------------
+   Shared utility classes (only used inside the grimoire interface)
+   --------------------------------------------------------------------------- */
+#native-spell-displays .titleFont {
+    font-family: 'Merriweather', Georgia, serif;
+}
+
+#native-spell-displays .smallFramed {
+    border: 1px solid #e2dd48;
+    background: #000 url('../../images/darkNoise.jpg');
+    border-radius: 8px;
+    box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.5),
+                0px 2px 4px rgba(0,0,0,0.25),
+                0px 0px 2px 2px #000 inset,
+                0px 1px 0px 1px rgba(255,255,255,0.5) inset;
+    text-shadow: 0px 1px 1px #000;
+    color: #ccc;
+    line-height: 100%;
+    border-color: #ece2b6 #875526 #733726 #dfbc9a;
+}
+
+#native-spell-displays .meterContainer {
+    background: rgba(0,0,0,0.5);
+    position: relative;
+    border-radius: 2px;
+    height: 8px;
+}
+
+#native-spell-displays .meter {
+    background: url('../../images/prestigeBar.jpg') 0px 0px;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    transform: translate(0px, 0px);
+}
+
+#native-spell-displays .meter:after {
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    right: -8px;
+    top: 0px;
+    content: '';
+    display: block;
+    background: url('../../images/prestigeBarCap.png');
+}
+
+#native-spell-displays .shadowFilter,
+#native-spell-displays .usesIcon {
+    filter: drop-shadow(0px 3px 2px #000);
+    -webkit-filter: drop-shadow(0px 3px 2px #000);
+}
+
+#native-spell-displays .usesIcon {
+    background-image: url('../../images/icons.png');
+    background-repeat: no-repeat;
+}
+
+#native-spell-displays .icon,
+#native-spell-displays .crate {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+    margin: 0px 4px;
+    background-repeat: no-repeat;
+}
+
+/* ---------------------------------------------------------------------------
+   Grimoire-specific styles (originally embedded in minigameGrimoire.js)
+   --------------------------------------------------------------------------- */
+
+/* Expanded cost display: per-spell default + GFD cost lines that sit
+   directly below each grimoire spell box when the "Expanded cost
+   displays" checkbox is on. White, slightly larger text. */
+#native-spell-displays .grimoireSpellWrapper {
+    display: inline-block;
+    vertical-align: top;
+    width: auto;
+    text-align: center;
+}
+
+#native-spell-displays .grimoireSpellExtra {
+    display: none;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0px 0px 4px #000, 0px 0px 6px #000;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 1.3;
+    margin: 2px 0 6px 0;
+    min-height: 2.6em;
+}
+
+#native-spell-displays .grimoireSpellExtraCost,
+#native-spell-displays .grimoireSpellExtraGfd {
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.3;
+}
+#native-spell-displays #grimoireBG {
+    background: url('../../images/shadedBorders.png'),
+                url('../../images/BGgrimoire.jpg');
+    background-size: 100% 100%, auto;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 16px;
+}
+
+#native-spell-displays #grimoireContent {
+    position: relative;
+    box-sizing: border-box;
+    padding: 4px 24px;
+}
+
+#native-spell-displays #grimoireBar {
+    max-width: 95%;
+    margin: 4px auto;
+    height: 16px;
+}
+
+#native-spell-displays #grimoireBarFull {
+    transform: scale(1, 2);
+    transform-origin: 50% 0;
+    height: 50%;
+}
+
+#native-spell-displays #grimoireBarText {
+    transform: scale(1, 0.8);
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    text-align: center;
+    color: #fff;
+    text-shadow: -1px 1px #000, 0px 0px 4px #000, 0px 0px 6px #000;
+    margin-top: 2px;
+}
+
+#native-spell-displays #grimoireSpells {
+    text-align: center;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#native-spell-displays .grimoireIcon {
+    pointer-events: none;
+    margin: 2px 6px 0px 6px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.8;
+    position: relative;
+}
+
+#native-spell-displays .grimoirePrice {
+    pointer-events: none;
+}
+
+#native-spell-displays .grimoireSpell {
+    box-shadow: 4px 4px 4px #000;
+    cursor: pointer;
+    position: relative;
+    color: #f33;
+    opacity: 0.8;
+    text-shadow: 0px 0px 4px #000, 0px 0px 6px #000;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+    width: 60px;
+    height: 74px;
+    background: url('../../images/spellBG.png');
+}
+
+#native-spell-displays .grimoireSpell.ready {
+    color: rgba(255,255,255,0.8);
+    opacity: 1;
+}
+
+#native-spell-displays .grimoireSpell.ready:hover { color: #fff; }
+
+#native-spell-displays .grimoireSpell:hover {
+    box-shadow: 6px 6px 6px 2px #000;
+    z-index: 1000000001;
+    top: -1px;
+}
+
+#native-spell-displays .grimoireSpell:active { top: 1px; }
+
+#native-spell-displays .grimoireSpell.ready .grimoireIcon { opacity: 1; }
+
+#native-spell-displays .grimoireSpell:hover .grimoireIcon { top: -1px; }
+
+#native-spell-displays .grimoireSpell.ready:hover .grimoireIcon {
+    animation-name: grimoireBounce;
+    animation-iteration-count: infinite;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
+
+#native-spell-displays.noFancy .grimoireSpell.ready:hover .grimoireIcon {
+    animation: none;
+}
+
+#native-spell-displays #grimoireInfo {
+    text-align: center;
+    font-size: 11px;
+    margin-top: 12px;
+    color: rgba(255,255,255,0.75);
+    text-shadow: -1px 1px 0px #000;
+}
+
+@keyframes grimoireBounce {
+    0%   { transform-origin: 50% 100%; transform: scale(1,1); }
+    10%  { transform-origin: 50% 100%; transform: scale(0.9,1.2); }
+    20%  { transform-origin: 50% 100%; transform: scale(1.5,0.5); }
+    25%  { transform-origin: 50% 100%; transform: scale(0.75,1.5) translate(0px,-10px); }
+    30%  { transform-origin: 50% 100%; transform: scale(0.8,1.2) translate(0px,-20px); }
+    60%  { transform-origin: 50% 100%; transform: scale(1,1) translate(0px,-25px); }
+    70%  { transform-origin: 50% 100%; transform: scale(2,0.5); }
+    80%  { transform-origin: 50% 100%; transform: scale(0.8,1.2); }
+    90%  { transform-origin: 50% 100%; transform: scale(1,1); }
+    100% { transform-origin: 50% 100%; transform: scale(1,1); }
+}

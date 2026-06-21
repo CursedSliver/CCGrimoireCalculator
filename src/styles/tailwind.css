@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme {
+    --color-box-edge: #000000;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+body {
+    padding: 10px;
+}
+p {
+    padding-left: 3px;
+    margin-left: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Section / nested-box UI guidelines
+   Applied across all four refactored sections (Spells, Arbitrary multicast,
+   Advanced GFD, Transmutation graph). Each section is a .section-box and
+   its child content uses .nested-box for the visually nested appearance.
+   - medium padding (p-6 on the section, p-3 on nested boxes)
+   - black text and black borders (text-black, border-box-edge)
+   - transparent backgrounds on the section root, white backgrounds on
+     nested boxes (or transparent, depending on the surface)
+   --------------------------------------------------------------------------- */
+
+/* Section root: medium padding, black border, transparent background.
+   Sections are direct children of <body>. */
+.section-box {
+    padding: 1.5rem; /* medium */
+    border: 1px solid var(--color-box-edge);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    color: #000000;
+}
+
+/* Nested content inside a section: nested box appearance. */
+.nested-box {
+    padding: 0.75rem; /* medium for nested content */
+    border: 1px solid var(--color-box-edge);
+    border-radius: var(--radius-xs);
+    background: #ffffff;
+    color: #000000;
+}
+
+/* A nested box that itself contains only a thin annotation/value (e.g.
+   mana info, calculator output) uses a transparent background to keep
+   the visual hierarchy clear. */
+.nested-box--transparent {
+    background: transparent;
+}
+
+#dataAnnotations {
+    display: flex;
+    width: 800px;
+    flex-wrap: wrap;
+}
+#squareSizeSelector {
+    padding: 3px;
+    margin: 7px;
+}
+div.box {
+    border-radius: 4px;
+    padding: 6px;
+    display: flex;
+    margin: 4px;
+    border: 1px black solid;
+    justify-content: center;
+    align-items: center;
+}
+div.icon {
+    width: 48px;
+    height: 48px;
+    margin: -10px;
+    background-image: url('../../images/icons.png');
+    transform: scale(0.5);
+}
+
+/* Two-column grid for the #spell-config input rows: a max-content label
+   column and a fixed-width input column. Using a named utility keeps the
+   input widths identical and aligned at the same horizontal position. */
+@utility grid-cols-config {
+    grid-template-columns: max-content 5rem;
+}
+@utility grid-cols-config-additional {
+    grid-template-columns: max-content 5rem max-content;
+}
+
+/* Reusable modern single-line input styling for the grimoire config box. */
+@utility config-input {
+    font-family: inherit;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+/* Hide the spinners on number inputs for a cleaner single-line look. */
+@utility no-spinner {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+}
+
+/* Ridge border style used by the transmutation-graph canvas frame.
+   Tailwind v4 does not ship a `border-ridge` utility, so we add a small
+   named utility for the one place that needs it. */
+@utility border-ridge {
+    border-style: ridge;
+}

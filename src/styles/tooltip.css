@@ -1,0 +1,65 @@
+/* =============================================================================
+   Tooltip system — two visual configurations.
+
+   The tooltip element is created on demand by src/tooltip.js and appended to
+   <body>. It is hidden by default (`.tooltip { display: none }`) and the JS
+   sets `display: block` and inline `left` / `top` styles on `mouseenter`.
+   The position is fixed (viewport-relative) and does not change on mouse
+   movement within the target element; it is re-anchored only on scroll /
+   resize by the JS module.
+
+   Configurations:
+     .tooltip--framed  — mimics the in-game .framed class from
+                         reference-material/style.css. Uses
+                         images/frameBorder.png as a 3px border-image
+                         (round) and images/darkNoise.jpg as the background,
+                         with the same gold/brown border colors and inset
+                         shadows the game uses.
+     .tooltip--default — a simple rounded border with a solid black
+                         background and white text.
+   ============================================================================= */
+
+.tooltip {
+    /* Layout — the JS sets display / left / top inline. */
+    position: fixed;
+    z-index: 1000000002;   /* above the grimoire's hover z-index (1000000001) */
+    pointer-events: none;  /* never block the underlying element */
+    max-width: 260px;
+    min-width: 32px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.3;
+    display: none;         /* hidden until src/tooltip.js shows it */
+}
+
+/* ---- Framed Look ---------------------------------------------------------
+   Reproduces the in-game .framed class: a 3px transparent border with
+   frameBorder.png as the border-image (round), darkNoise.jpg as the
+   background fill, and the characteristic inset / outer drop shadows. */
+.tooltip--framed {
+    padding: 4px 8px;
+    border: 3px solid transparent;
+    border-image: url('../../images/frameBorder.png') 3 round;
+    border-radius: 2px;
+    background: #000 url('../../images/darkNoise.jpg');
+    background-color: #000;
+    color: #ccc;
+    text-shadow: 0px 1px 1px #000;
+    line-height: 100%;
+    box-shadow:
+        0px 0px 1px 2px rgba(0, 0, 0, 0.5),
+        0px 2px 4px rgba(0, 0, 0, 0.25),
+        0px 0px 6px 1px rgba(0, 0, 0, 0.5) inset;
+    font-family: 'Merriweather', Georgia, serif;
+}
+
+/* ---- Default Look --------------------------------------------------------
+   Simple rounded border with a solid black background. */
+.tooltip--default {
+    padding: 4px 8px;
+    border: 1px solid #888;
+    border-radius: 6px;
+    background: #000;
+    color: #fff;
+    font-family: Tahoma, Arial, sans-serif;
+}

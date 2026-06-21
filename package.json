@@ -1,0 +1,25 @@
+{
+  "name": "ccgrimoirecalculator",
+  "version": "1.0.0",
+  "description": "A helpful tool to calculate various things related to the Grimoire minigame and comboing in Cookie clicker.",
+  "main": "src/app.js",
+  "scripts": {
+    "tailwindStyles": "npx @tailwindcss/cli -i src/styles/tailwind.css -o src/styles/tailwind.output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CursedSliver/CCGrimoireCalculator.git"
+  },
+  "keywords": [
+    "tailwindcss"
+  ],
+  "author": "Lookas123, CursedSliver",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/CursedSliver/CCGrimoireCalculator/issues"
+  },
+  "homepage": "https://github.com/CursedSliver/CCGrimoireCalculator#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.1"
+  }
+}

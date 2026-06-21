@@ -3,131 +3,361 @@
 <html lang="en">
 <head>
         <title>Grimoire Calculator</title>
-        <link rel="stylesheet" href="style.css">
+        <meta charset="UTF-8">
+        <meta type="description" content="A helpful tool for various Grimoire and combo calculations in Cookie Clicker.">
+        <meta name="robots" content="index, follow">
+        <link rel="stylesheet" href="src/styles/tailwind.output.css">
+    <link rel="stylesheet" href="src/styles/tooltip.css">
 </head>
 
-<body>
-  Level of your wizard towers: 
-  <input id = "level" type="number" min="1" value="1" onchange="calculateStuff()"></input><br>
-  Number of wizard towers: 
-  <input id = "count" type="number" min="1" value="1" onchange="calculateStuff()"></input><br>
-  <div id = "manainfo">With those numbers, your maximum mana would be 5, and the lowest maximum mana you could reach would be 5</div>
-  Maximum mana:
-  <input id = "maxmana" type="number" min="5" value = "5" onchange="updateManaWith(this.value);calculateStuff();correspondingCount.innerText = getTowerCountFromMagic(parseInt(lvl.value), parseInt(this.value)).join(', '); updateAdv();"></input><br>
-  Corresponding tower counts: [<span id = "correspondingTowerCount">1, 2</span>)<br>
-  <input type="checkbox" id = "SI" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-  <label for="SI">Supreme intellect (Shift + S)</label><br>
-  <input type="checkbox" id = "RB" onchange="updateAurasWith(si.checked, rb.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-  <label for="RB">Reality bending (Shift + R)</label><br>
-  <input type="checkbox" id = "gudRegen" onchange="calculateStuff()">
-  <label for="gudRegen">Assume maximum mana for regen purposes is always max(100, current mana + 1)   Don't check if you don't know what this means</label><br>
-  <br>
-  <input type="checkbox" id = "calcOptimal" onchange="calculateStuff()">
-  <label for="calcOptimal">Calculate optimal max magic (up to the set max magic)</label><br>
-
-  <br>
-  Gambler's fever dream checks:
-  <p margin_down = 0px style="margin-top: 0px;">
-  <input type="checkbox" id = "Buffs" onchange="calculateStuff()">
-  <label for="Buffs"> Buffs active</label><br>
-  <input type="checkbox" id = "SE" onchange="calculateStuff()">
-  <label for="SE"> 400 of everything</label><br>
-  <input type="checkbox" id = "gpoc" onchange="calculateStuff()">
-  <label for="gpoc"> Grandmapocalypse is active</label><br>
-  <input type="checkbox" id = "dogfd" checked onchange="calculateStuff()">
-  <label for="dogfd"> Calculate it at all(disabling this option will prevent some lag or even crashing with high multi-cast numbers)</label><br><br>
-  How many times do you want to cast the spell(assumes sell strats):
-  <input id = "multi" type="number" min="1" value = "1" onchange="calculateStuff()"></input>
-  </p>
-  <p id = "spell1"></p>
-  <p id = "spell2"></p>
-  <p id = "spell3"></p>
-  <p id = "spell4"></p>
-  <p id = "spell5"></p>
-  <p id = "spell6"></p>
-  <p id = "spell7"></p>
-  <p id = "spell8"></p>
-  <p id = "spell9"></p>
-  <input type="text" id="arbitraryCast">
-  <label for="arbitraryCast">Input arbitrary multicast:<br>casts separated by space, supports acronyms (eg. fthof di scp), gfd casts (start the cast with "g!"), specified cost functions (eg. 25%+12), and bundling without selling with - (eg. fthof-g!fthof) (note that this uses the level and SI/RB fields from above)</label><br>
-  <input type="number" id="ACmagicLeft" min="0" value="0">
-  <label for="ACmagicLeft">Magic left after multicast</label><br>
-  <button onclick="arbitraryCalc()">Calculate arbitrary multicast</button><br>
-  <samp id ="arbitraryCastOutput"></samp>
-
-  <br>
-  Advanced functions:
-  <div class="pE" id = "advConfig" style="margin-top: 0px;">
-    Current mana: 
-    <input id = "curmana" type="number" min="5" value = "5" onchange="calculateStuff();updateAdv();"></input><br>
-    Maximum mana:
-    <input id = "maxmana2" type="number" min="5" value = "5" onchange="updateManaWith(this.value);calculateStuff();updateAdv()"></input><br>
-    Maximum max mana to consider: 
-    <input id = "maxmaxmana" type="number" min="5" value = "200" onchange="magicAbsMax = parseInt(document.getElementById('maxmaxmana').value)"></input><br>
-    Minimum current mana: 
-    <input id = "minmanacur" type="number" min="5" value = "5" onchange="if (parseFloat(maxAllowedMana.value) < parseFloat(minAllowedMana.value)) { maxAllowedMana.value = minAllowedMana.value }"></input><br>
-    Maximum current mana: 
-    <input id = "maxmanacur" type="number" min="5" value = "200" onchange="if (parseFloat(maxAllowedMana.value) < parseFloat(minAllowedMana.value)) { maxAllowedMana.value = minAllowedMana.value }"></input><br>
-    GFD random number:
-    <input id = "gfdRandom" onchange="updateAdv()"></input><br>
-    Try transmute to desired outcome:
-    <div class="pE">
-      <select id = "spellsDropdown"></select><br>
-      <button onclick="setTextFromTransmutatonAttempt(tryTransmuteToRange(parseFloat(gfdRandom.value), parseFloat(minAllowedMana.value), parseFloat(maxAllowedMana.value), spellsDropdown.value))">Attempt</button><br>
-      <div class="pE"><samp id = "desiredOutcomeOutput"></samp></div>
-    </div>
-    Try transmute into refund:
-    <div class="pE">
-      Maximum GFD mana cost: <input id = "GFDMaxForRefund" type="number" min="3" value = "30"></input><br>
-      <button onclick="setTextFromRefundCalc(tryOffsetRefunds(parseFloat(gfdRandom.value), parseInt(current.value), parseInt(GFDMaxForRefund.value)))">Attempt</button><br>
-      <div class="pE"><samp id = "refundOutput"></samp></div>
-    </div>
+<body class="text-black">
+  <div class="text-center w-full mt-6">
+    <h1 class="text-4xl font-bold">Grimoire calculator</h1>
+    <small>Contact: @cursedsliver on discord (original by @lookas123 on discord)</small>
   </div>
-  <br>
-  <div class="pE" id = "adv">
-    Possible GFD outcomes:
-    <div id="gfdOutcomesList"></div>
-  </div>
-
-  <br>
-  <button id="offsetVisualOpenButton" onclick="redrawAll(true); rescale(8); document.getElementById('offsetVisualRelated').style.display = ''; document.getElementById('offsetVisualOpenButton').style.display = 'none'; " style="display: block; width: 200px; height: 40px; font-size: 20px;">Get offset graph</button>
-  <div id="offsetVisualRelated" style="display: none;">
-    Shows what you can get from GFD from certain magic ranges with or without Supreme Intellect or Reality Bending. You can hover over them to zoom in, and each highlightable square represents a magic amount compared to some max magic amount; each of the four aura possibilities (neither, SI, RB, or SI + RB) occupy a side in each square.
-    <br>The dragon cookie icon represents both SI and RB active.
-    <div id="dataAnnotations">
-
+  <section id="spells-box" class="section-box m-4 p-6 border border-box-edge rounded-xs bg-white text-black">
+    <div class="section-header flex items-center justify-between mb-2">
+      <h3 class="text-lg font-semibold">Spells</h3>
+      <button type="button" class="section-toggle border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
+              aria-expanded="true" aria-controls="spells-box-body">Hide</button>
     </div>
-    <div class="pE" style="display: none;">
-      <input type="checkbox" id = "SI2" onchange="updateAurasWith(si2.checked, rb2.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-      <label for="SI2">Supreme intellect (Shift + S)</label><br>
-      <input type="checkbox" id = "RB2" onchange="updateAurasWith(si2.checked, rb2.checked);calculateStuff();updateAdv();if (dataPoints.length) { redrawAll(); }">
-      <label for="RB2">Reality bending (Shift + R)</label><br>
-      (the above is synced with the other checkboxes)
-    </div>
-    <div id="offsetGraphContainer">
-      <div id="squareSizeSelector" class="pE">
-        <label for="scalingSlider">Amount of squares to show:</label><br>
-        <input type="range" id="scalingSlider" min="1" max="196" step="1" value="98" oninput="document.getElementById('scalingSliderValue').textContent = this.value;">
-        <span id="scalingSliderValue">98</span><br>
-        <label for="xSlider">Max magic at bottom left square: (left and right arrows, shift or ctrl to triple move, shift + ctrl to move 9 squares)</label><br>
-        <input type="range" id="xSlider" min="0" max="103" step="1" value="5" oninput="document.getElementById('xSliderValue').textContent = this.value;">
-        <span id="xSliderValue">5</span><br>
-        <label for="ySlider">Current magic at bottom left square: (up and down arrows, shift or ctrl to triple move, shift + ctrl to move 9 squares)</label><br>
-        <input type="range" id="ySlider" min="0" max="103" step="1" value="5" oninput="document.getElementById('ySliderValue').textContent = this.value;">
-        <span id="ySliderValue">5</span><br>
+    <div id="spells-box-body" class="section-body">
+
+    <div class="flex flex-nowrap box-border h-auto">
+      <div id="native-spell-displays" class="inline-block w-1/2 m-2 align-top box-border">
+        <link rel="stylesheet" href="src/styles/grimoire.css">
+        <div id="grimoireBG"></div>
+        <div id="grimoireContent">
+          <div id="grimoireSpells">
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell0">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1008px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice0">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell1">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1056px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice1">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell2">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1104px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice2">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell3">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1152px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice3">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell4">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1200px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice4">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell5">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1248px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice5">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell6">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1296px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice6">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell7">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1344px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice7">-</div>
+            </div>
+            <div class="grimoireSpell ready titleFont" id="grimoireSpell8">
+              <div class="usesIcon shadowFilter grimoireIcon" style="background-position:-1392px -528px;"></div>
+              <div class="grimoirePrice" id="grimoirePrice8">-</div>
+            </div>
+          </div>
+          <div id="grimoireBar" class="smallFramed meterContainer" style="width:1px;">
+            <div id="grimoireBarFull" class="meter filling" style="width:1px;"></div>
+            <div id="grimoireBarText" class="titleFont">5/5</div>
+          </div>
+          <div id="grimoireInfo">
+            <div>Lowest possible max magic: <span id="minMagicInfo" class="underline">?</span></div>
+            Tweak the options to the right to see the magic costs change. Hover to see recharge time and other info.
+          </div>
+        </div>
       </div>
-      <div id="canvasContainer" style="display: inline-block; border: 3px black ridge;">
-        <canvas id="offsetGraphInteractiveDisplay" width="1000" height="1000" style="position: absolute; background: none; z-index: 1; width: 784px; height: 784px;"></canvas>
-        <canvas id="offsetGraph" width="1000" height="1000" style="width: 784px; height: 784px;"></canvas>
+
+      <div id="spell-config" class="nested-box flex w-1/2 border border-box-edge items-stretch justify-center flex-row m-2 rounded-xs p-3 box-border text-left bg-white text-black">
+        <div id="spell-config-left" class="flex flex-col items-start justify-start w-1/2 pr-3 box-border">
+          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+            <label for="grimoireLevel" class="text-left whitespace-nowrap">Level of your wizard towers:</label>
+            <input id="grimoireLevel" type="number" min="1" value="1"
+                   class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
+          </div>
+          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+            <label for="grimoireCount" class="text-left whitespace-nowrap">Number of wizard towers:</label>
+            <input id="grimoireCount" type="number" min="1" value="1"
+                   class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
+          </div>
+          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+            <label for="grimoireDirectMagic" class="text-left whitespace-nowrap">Direct magic
+              <span id="grimoireDirectMagicHelp" class="underline">(?)</span>
+              :
+            </label>
+            <input id="grimoireDirectMagic" type="number" min="0"
+                   class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+                   onchange="calculateStuff()">
+          </div>
+        </div>
+        <div id="spell-config-divider" class="w-px self-stretch bg-box-edge mx-3 box-border" aria-hidden="true"></div>
+        <div id="spell-config-right" class="flex flex-col items-start justify-start w-1/2 pl-3 box-border">
+          <div class="flex flex-row items-center gap-x-6 mb-2">
+            <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+              <input type="checkbox" id="grimoireSI" class="cursor-pointer">
+              <span>Supreme intellect</span>
+            </label>
+            <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+              <input type="checkbox" id="grimoireRB" class="cursor-pointer">
+              <span>Reality bending</span>
+            </label>
+          </div>
+          <div class="flex flex-row items-center gap-x-2 mb-2">
+            <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+              <input type="checkbox" id="grimoireExpandedCost" class="cursor-pointer">
+              <span>Expanded cost displays</span>
+            </label>
+          </div>
+          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+            <label for="multi" class="text-left whitespace-nowrap">Multicast count
+              <span id="multiHelp" class="underline">(?)</span>
+              :
+            </label>
+            <input id="multi" type="number" min="1" value="1"
+                 class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+                 onchange="calculateStuff()">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="spells-casts-config" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black">
+      <div class="mb-1 font-semibold">Reverse tower count check:</div>
+      <div class="grid grid-cols-config-additional gap-x-2 items-center mb-2">
+        <label for="maxmana" class="text-left whitespace-nowrap">Maximum mana:</label>
+        <input id="maxmana" type="number" min="5" value="5"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="updateManaWith(this.value);calculateStuff();correspondingTowerCount.innerText = formatTowerCountFromMagic(getTowerCountFromMagic(parseInt(document.getElementById('grimoireLevel').value), parseInt(this.value))); updateAdv();">
+        <div class="mb-2">Corresponding tower counts: <span id="correspondingTowerCount">>=1, <2</span></div>
+      </div>
+    </div>
+    <div class="text-center pt-3">
+      <button id="spells-advanced-toggle" type="button" class="m-auto border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
+              aria-expanded="true" aria-controls="advanced-spells-options" onclick="toggleSpellsAdvanced()">Show more options</button>
+    </div>
+    <div id="spells-advanced-section" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black hidden">
+      <div class="mb-1 font-semibold">Gambler's fever dream checks:</div>
+      <div class="flex flex-row items-center gap-x-6 flex-wrap">
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="Buffs" class="cursor-pointer" onchange="calculateStuff()">
+          <span>Buffs active</span>
+        </label>
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="SE" class="cursor-pointer" onchange="calculateStuff()">
+          <span>400 of everything</span>
+        </label>
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="gpoc" class="cursor-pointer" onchange="calculateStuff()">
+          <span>Grandmapocalypse is active</span>
+        </label>
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="dogfd" checked class="cursor-pointer" onchange="calculateStuff()">
+          <span>Calculate it at all (disabling this option will prevent some lag or even crashing with high multi-cast numbers)</span>
+        </label>
       </div>
       <br>
-      <br>
-      <br>
+      <div class="mb-1 font-semibold">Advanced regen:</div>
+      <div class="flex flex-row items-center gap-x-6 flex-wrap">
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="gudRegen" class="cursor-pointer" onchange="calculateStuff()">
+          <span>Assume maximum mana for regen purposes is always max(100, current mana + 1)   Don't check if you don't know what this means</span>
+        </label>
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="calcOptimal" class="cursor-pointer" onchange="calculateStuff()">
+          <span>Calculate optimal max magic (up to the set max magic)</span>
+        </label>
+      </div>
     </div>
-  </div>
-  <img id="iconsImg" src="icons.png" style="display:none;" />
-  <script src="js.js"></script>
-  <script src="gfdss.js"></script>
-  <script src="offsetGraph.js"></script>
+    </div>
+  </section>
+
+  <section id="arbitrary-multicast-box" class="section-box m-4 p-6 border border-box-edge rounded-xs bg-white text-black">
+    <div class="section-header flex items-center justify-between mb-2">
+      <h3 class="text-lg font-semibold">Arbitrary multicast</h3>
+      <button type="button" class="section-toggle border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
+              aria-expanded="true" aria-controls="arbitrary-multicast-body">Hide</button>
+    </div>
+    <div id="arbitrary-multicast-body" class="section-body">
+    <div id="arbitrary-multicast-controls" class="nested-box p-3 border border-box-edge rounded-xs bg-white text-black">
+      <div id="arbitrary-multicast-config" class="nested-box mb-2 p-3 border border-box-edge rounded-xs bg-white text-black">
+        <div class="mb-1 font-semibold">Section-local parameters:</div>
+        <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+          <label for="ACLevel" class="text-left whitespace-nowrap">Level of your wizard towers:</label>
+          <input type="number" id="ACLevel" min="1" value="1"
+                 class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
+        </div>
+        <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+          <label for="ACCount" class="text-left whitespace-nowrap">Number of wizard towers:</label>
+          <input type="number" id="ACCount" min="1" value="1"
+                 class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
+        </div>
+        <div class="flex flex-row items-center gap-x-6 mt-3 flex-wrap">
+          <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+            <input type="checkbox" id="ACSI" class="cursor-pointer">
+            <span>Supreme intellect</span>
+          </label>
+          <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+            <input type="checkbox" id="ACRB" class="cursor-pointer">
+            <span>Reality bending</span>
+          </label>
+        </div>
+        <div class="mb-1 mt-3 text-sm">Local max mana: <span id="ACMaxManaDisplay">5</span></div>
+      </div>
+      <div class="mb-2">
+        <label for="arbitraryCast" class="block mb-1">Input arbitrary multicast:</label>
+        <input type="text" id="arbitraryCast" class="config-input border border-box-edge rounded-xs px-2 py-1 w-full">
+        <span class="text-sm">casts separated by space, supports acronyms (eg. fthof di scp), gfd casts (start the cast with "g!"), specified cost functions (eg. 25%+12), and bundling without selling with - (eg. fthof-g!fthof)</span>
+      </div>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="ACmagicLeft" class="text-left whitespace-nowrap">Magic left after multicast:</label>
+        <input type="number" id="ACmagicLeft" min="0" value="0"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
+      </div>
+      <div class="mb-2">
+        <button id="arbitraryCalcButton" class="border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer">Calculate arbitrary multicast</button>
+      </div>
+      <samp id="arbitraryCastOutput" class="block nested-box p-2 border border-box-edge rounded-xs bg-transparent text-black" style="display: none;"></samp>
+    </div>
+    </div>
+  </section>
+
+  <section id="advanced-gfd-box" class="section-box m-4 p-6 border border-box-edge rounded-xs bg-white text-black">
+    <div class="section-header flex items-center justify-between mb-2">
+      <h3 class="text-lg font-semibold">Advanced GFD</h3>
+      <button type="button" class="section-toggle border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
+              aria-expanded="true" aria-controls="advanced-gfd-body">Hide</button>
+    </div>
+    <div id="advanced-gfd-body" class="section-body">
+    <div id="advConfig" class="nested-box p-3 border border-box-edge rounded-xs bg-white text-black">
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="curmana" class="text-left whitespace-nowrap">Current mana:</label>
+        <input id="curmana" type="number" min="5" value="5"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="calculateStuff();updateAdv();">
+      </div>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="maxmana2" class="text-left whitespace-nowrap">Maximum mana:</label>
+        <input id="maxmana2" type="number" min="5" value="5"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="updateManaWith(this.value);calculateStuff();updateAdv()">
+      </div>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="maxmaxmana" class="text-left whitespace-nowrap">Maximum max mana to consider:</label>
+        <input id="maxmaxmana" type="number" min="5" value="200"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="magicAbsMax = parseInt(document.getElementById('maxmaxmana').value)">
+      </div>
+      <div class="flex flex-row items-center gap-x-6 mb-2 flex-wrap">
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="gfdSI" class="cursor-pointer">
+          <span>Supreme intellect</span>
+        </label>
+        <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
+          <input type="checkbox" id="gfdRB" class="cursor-pointer">
+          <span>Reality bending</span>
+        </label>
+      </div>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="minmanacur" class="text-left whitespace-nowrap">Minimum current mana:</label>
+        <input id="minmanacur" type="number" min="5" value="5"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="if (parseFloat(maxAllowedMana.value) < parseFloat(minAllowedMana.value)) { maxAllowedMana.value = minAllowedMana.value }">
+      </div>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="maxmanacur" class="text-left whitespace-nowrap">Maximum current mana:</label>
+        <input id="maxmanacur" type="number" min="5" value="200"
+               class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="if (parseFloat(maxAllowedMana.value) < parseFloat(minAllowedMana.value)) { maxAllowedMana.value = minAllowedMana.value }">
+      </div>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+        <label for="gfdRandom" class="text-left whitespace-nowrap">GFD random number:</label>
+        <input id="gfdRandom"
+               class="config-input border border-box-edge rounded-xs px-2 py-1 w-20"
+               onchange="updateAdv()">
+      </div>
+      <div id="advConfig-transmute" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-transparent text-black">
+        <div class="mb-1 font-semibold">Try transmute to desired outcome:</div>
+        <select id="spellsDropdown" class="config-input border border-box-edge rounded-xs px-2 py-1"></select><br>
+        <button class="border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer mt-1"
+                onclick="setTextFromTransmutatonAttempt(tryTransmuteToRange(parseFloat(gfdRandom.value), parseFloat(minAllowedMana.value), parseFloat(maxAllowedMana.value), spellsDropdown.value))">Attempt</button>
+        <div class="nested-box mt-2 p-2 border border-box-edge rounded-xs bg-transparent text-black"><samp id="desiredOutcomeOutput"></samp></div>
+      </div>
+      <div id="advConfig-refund" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-transparent text-black">
+        <div class="mb-1 font-semibold">Try transmute into refund:</div>
+        <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+          <label for="GFDMaxForRefund" class="text-left whitespace-nowrap">Maximum GFD mana cost:</label>
+          <input id="GFDMaxForRefund" type="number" min="3" value="30"
+                 class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
+        </div>
+        <button class="border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
+                onclick="setTextFromRefundCalc(tryOffsetRefunds(parseFloat(gfdRandom.value), parseInt(current.value), parseInt(GFDMaxForRefund.value)))">Attempt</button>
+        <div class="nested-box mt-2 p-2 border border-box-edge rounded-xs bg-transparent text-black"><samp id="refundOutput"></samp></div>
+      </div>
+    </div>
+    <div id="adv" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black">
+      <div class="mb-1 font-semibold">Possible GFD outcomes:</div>
+      <div id="gfdOutcomesList"></div>
+    </div>
+    </div>
+  </section>
+  
+  <section id="transmutation-graph-box" class="section-box m-4 p-6 border border-box-edge rounded-xs bg-white text-black">
+    <div class="section-header flex items-center justify-between mb-2">
+      <h3 class="text-lg font-semibold">Transmutation graph</h3>
+      <button type="button" class="section-toggle border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
+              aria-expanded="true" aria-controls="transmutation-graph-body">Hide</button>
+    </div>
+    <div id="transmutation-graph-body" class="section-body">
+    <button id="offsetVisualOpenButton" class="border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer block w-full h-10 mt-5 text-[20px]">Click this to generate the transmutation graph</button>
+    <div id="offsetVisualRelated" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black hidden">
+      <p>Shows what you can get from GFD from certain magic ranges with or without Supreme Intellect or Reality Bending. You can hover over them to zoom in, and each highlightable square represents a magic amount compared to some max magic amount; each of the four aura possibilities (neither, SI, RB, or SI + RB) occupy a side in each square.</p>
+      <p>The dragon cookie icon represents both SI and RB active.</p>
+      <div id="dataAnnotations"></div>
+      <div class="hidden">
+        <input type="checkbox" id="SI2" onchange="if (dataPoints.length) { redrawAll(); }">
+        <label for="SI2">Supreme intellect (Shift + S)</label><br>
+        <input type="checkbox" id="RB2" onchange="if (dataPoints.length) { redrawAll(); }">
+        <label for="RB2">Reality bending (Shift + R)</label><br>
+        (the above is local to the transmutation graph section)
+      </div>
+      <div id="offsetGraphContainer">
+        <div id="squareSizeSelector" class="pE">
+          <label for="scalingSlider">Amount of squares to show:</label><br>
+          <input type="range" id="scalingSlider" min="1" max="196" step="1" value="98" oninput="document.getElementById('scalingSliderValue').textContent = this.value;">
+          <span id="scalingSliderValue">98</span><br>
+          <label for="xSlider">Max magic at bottom left square: (left and right arrows, shift or ctrl to triple move, shift + ctrl to move 9 squares)</label><br>
+          <input type="range" id="xSlider" min="0" max="103" step="1" value="5" oninput="document.getElementById('xSliderValue').textContent = this.value;">
+          <span id="xSliderValue">5</span><br>
+          <label for="ySlider">Current magic at bottom left square: (up and down arrows, shift or ctrl to triple move, shift + ctrl to move 9 squares)</label><br>
+          <input type="range" id="ySlider" min="0" max="103" step="1" value="5" oninput="document.getElementById('ySliderValue').textContent = this.value;">
+          <span id="ySliderValue">5</span><br>
+        </div>
+        <div id="canvasContainer" class="inline-block border-3 border-black border-ridge box-content">
+          <canvas id="offsetGraphInteractiveDisplay" width="1000" height="1000" class="absolute z-1 bg-none w-196 h-196"></canvas>
+          <canvas id="offsetGraph" width="1000" height="1000" class="w-196 h-196"></canvas>
+        </div>
+        <br>
+        <br>
+        <br>
+      </div>
+    </div>
+    </div>
+  </section>
+  <img id="iconsImg" src="images/icons.png" style="display:none;" />
+  <script src="src/app.js"></script>
+  <script src="src/gfdss.js"></script>
+  <script src="src/offsetGraph.js"></script>
+  <script src="src/spellsDisplay.js"></script>
+  <script src="src/multicast.js"></script>
+  <script src="src/tooltip.js"></script>
 </body>
 </html>
