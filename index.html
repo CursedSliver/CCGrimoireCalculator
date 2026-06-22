@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <meta type="description" content="A helpful tool for various Grimoire and combo calculations in Cookie Clicker.">
         <meta name="robots" content="index, follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="src/styles/tailwind.output.css">
     <link rel="stylesheet" href="src/styles/tooltip.css">
 </head>
@@ -23,8 +24,8 @@
     </div>
     <div id="spells-box-body" class="section-body">
 
-    <div class="flex flex-nowrap box-border h-auto">
-      <div id="native-spell-displays" class="inline-block w-1/2 m-2 align-top box-border">
+    <div class="flex flex-col 2xl:flex-row flex-nowrap box-border h-auto">
+      <div id="native-spell-displays" class="inline-block w-full 2xl:w-1/2 m-2 align-top box-border">
         <link rel="stylesheet" href="src/styles/grimoire.css">
         <div id="grimoireBG"></div>
         <div id="grimoireContent">
@@ -77,7 +78,7 @@
         </div>
       </div>
 
-      <div id="spell-config" class="nested-box flex w-1/2 border border-box-edge items-stretch justify-center flex-row m-2 rounded-xs p-3 box-border text-left bg-white text-black">
+      <div id="spell-config" class="nested-box flex w-full 2xl:w-1/2 border border-box-edge items-stretch justify-center flex-row m-2 rounded-xs p-3 box-border text-left bg-white text-black">
         <div id="spell-config-left" class="flex flex-col items-start justify-start w-1/2 pr-3 box-border">
           <div class="grid grid-cols-config gap-x-2 items-center mb-2">
             <label for="grimoireLevel" class="text-left whitespace-nowrap">Level of your wizard towers:</label>
