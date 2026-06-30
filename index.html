@@ -133,11 +133,13 @@
 
     <div id="spells-casts-config" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black">
       <div class="mb-1 font-semibold">Reverse tower count check:</div>
-      <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap m-1 ml-0">
-        <label for="maxmana" class="text-left whitespace-nowrap">Maximum mana:</label>
-        <input id="maxmana" type="number" min="5" value="5"
+      <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap flex-wrap m-1 ml-0">
+        <div>
+          <label for="maxmana" class="text-left whitespace-nowrap">Maximum mana:</label>
+          <input id="maxmana" type="number" min="5" value="5"
                class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
                onchange="updateManaWith(this.value);calculateStuff();correspondingTowerCount.innerText = formatTowerCountFromMagic(getTowerCountFromMagic(parseInt(document.getElementById('grimoireLevel').value), parseInt(this.value))); updateAdv();">
+        </div>
         <div class="mb-2">Corresponding tower counts: <span id="correspondingTowerCount">>=1, <2</span></div>
       </div>
     </div>
@@ -251,8 +253,8 @@
                class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
                onchange="updateManaWith(this.value);calculateStuff();updateAdv()">
       </div>
-      <div class="grid grid-cols-config gap-x-2 items-center mb-2">
-        <label for="maxmaxmana" class="text-left whitespace-nowrap">Maximum max mana to consider:</label>
+      <div class="grid grid-cols-config gap-x-2 items-center mb-2 flex-wrap">
+        <label for="maxmaxmana" class="text-left whitespace-nowrap">Maximum max mana:</label>
         <input id="maxmaxmana" type="number" min="5" value="200"
                class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
                onchange="magicAbsMax = parseInt(document.getElementById('maxmaxmana').value)">

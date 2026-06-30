@@ -305,6 +305,9 @@
   .w-px {
     width: 1px;
   }
+  .flex-1 {
+    flex: 1;
+  }
   .grow {
     flex-grow: 1;
   }
