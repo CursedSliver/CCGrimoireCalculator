@@ -24,8 +24,8 @@
     </div>
     <div id="spells-box-body" class="section-body">
 
-    <div class="flex flex-col 2xl:flex-row flex-nowrap box-border h-auto">
-      <div id="native-spell-displays" class="inline-block w-full 2xl:w-1/2 m-2 align-top box-border">
+    <div class="flex flex-col xl:flex-row flex-nowrap box-border h-auto">
+      <div id="native-spell-displays" class="inline-block w-full xl:w-1/2 m-2 align-top box-border">
         <link rel="stylesheet" href="src/styles/grimoire.css">
         <div id="grimoireBG"></div>
         <div id="grimoireContent">
@@ -78,19 +78,19 @@
         </div>
       </div>
 
-      <div id="spell-config" class="nested-box flex w-full 2xl:w-1/2 border border-box-edge items-stretch justify-center flex-row m-2 rounded-xs p-3 box-border text-left bg-white text-black">
-        <div id="spell-config-left" class="flex flex-col items-start justify-start w-1/2 pr-3 box-border">
-          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+      <div id="spell-config" class="nested-box flex flex-col xl:flex-row w-full xl:w-1/2 border border-box-edge items-stretch justify-center xl:flex-row m-2 rounded-xs p-3 box-border text-left bg-white text-black">
+        <div id="spell-config-left" class="flex flex-col items-start justify-start w-full xl:w-1/2 xl:pr-3 box-border">
+          <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap m-1">
             <label for="grimoireLevel" class="text-left whitespace-nowrap">Level of your wizard towers:</label>
             <input id="grimoireLevel" type="number" min="1" value="1"
                    class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
           </div>
-          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+          <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap m-1">
             <label for="grimoireCount" class="text-left whitespace-nowrap">Number of wizard towers:</label>
             <input id="grimoireCount" type="number" min="1" value="1"
                    class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20">
           </div>
-          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+          <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap m-1">
             <label for="grimoireDirectMagic" class="text-left whitespace-nowrap">Direct magic
               <span id="grimoireDirectMagicHelp" class="underline">(?)</span>
               :
@@ -100,8 +100,8 @@
                    onchange="calculateStuff()">
           </div>
         </div>
-        <div id="spell-config-divider" class="w-px self-stretch bg-box-edge mx-3 box-border" aria-hidden="true"></div>
-        <div id="spell-config-right" class="flex flex-col items-start justify-start w-1/2 pl-3 box-border">
+        <div id="spell-config-divider" class="hidden xl:block w-px self-stretch bg-box-edge mx-3 box-border" aria-hidden="true"></div>
+        <div id="spell-config-right" class="flex flex-col items-start justify-start w-full xl:w-1/2 xl:pl-3 box-border">
           <div class="flex flex-row items-center gap-x-6 mb-2">
             <label class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap">
               <input type="checkbox" id="grimoireSI" class="cursor-pointer">
@@ -118,7 +118,7 @@
               <span>Expanded cost displays</span>
             </label>
           </div>
-          <div class="grid grid-cols-config gap-x-2 items-center mb-2">
+          <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap m-1">
             <label for="multi" class="text-left whitespace-nowrap">Multicast count
               <span id="multiHelp" class="underline">(?)</span>
               :
@@ -133,7 +133,7 @@
 
     <div id="spells-casts-config" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black">
       <div class="mb-1 font-semibold">Reverse tower count check:</div>
-      <div class="grid grid-cols-config-additional gap-x-2 items-center mb-2">
+      <div class="flex items-center gap-x-2 cursor-pointer whitespace-nowrap m-1 ml-0">
         <label for="maxmana" class="text-left whitespace-nowrap">Maximum mana:</label>
         <input id="maxmana" type="number" min="5" value="5"
                class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
