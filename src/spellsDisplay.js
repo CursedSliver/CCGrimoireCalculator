@@ -462,6 +462,29 @@
         }
     };
 
+    function updateRegenCalc() {
+        const fromInput = document.getElementById("regenMagicFrom");
+        const toInput   = document.getElementById("regenMagicTo");
+        const output    = document.getElementById("spells-regen-raw-calc-output");
+        if (!fromInput || !toInput || !output) return;
+
+        const fromVal = parseFloat(fromInput.value);
+        const toVal   = parseFloat(toInput.value);
+
+        if (isNaN(fromVal) || isNaN(toVal)) {
+            output.textContent = "-";
+            return;
+        }
+
+        if (fromVal >= toVal) {
+            output.textContent = "Start magic must be less than target magic";
+            return;
+        }
+
+        const time = getRegenTime(fromVal, toVal);
+        output.textContent = "Recharge time: " + Math.round(time * 1000) / 1000 + " seconds";
+    }
+
     function toggleSpellsAdvanced() {
         if (spellsAdvancedSection) spellsAdvancedSection.classList.toggle("hidden");
         if (spellsAdvancedToggleL) spellsAdvancedToggleL.classList.toggle("hidden");
@@ -475,6 +498,7 @@
     window.getTowerCountFromMagic = getTowerCountFromMagic;
     window.formatTowerCountFromMagic = formatTowerCountFromMagic;
     window.toggleSpellsAdvanced = toggleSpellsAdvanced;
+    window.updateRegenCalc      = updateRegenCalc;
     window.getRegenTime         = getRegenTime;
     window.averageGFDtime       = averageGFDtime;
     window.cost                 = cost;

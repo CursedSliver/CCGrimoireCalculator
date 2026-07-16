@@ -143,6 +143,19 @@
         <div class="mb-2">Corresponding tower counts: <span id="correspondingTowerCount">>=1, <2</span></div>
       </div>
     </div>
+    <div id="spells-regen-raw-calc" class="nested-box mt-2 p-3 border border-box-edge rounded-xs bg-white text-black">
+      <div class="mb-1 font-semibold">Check regen speed from:</div>
+      <div class="flex items-center gap-x-2 flex-wrap m-1 ml-0">
+        <input id="regenMagicFrom" type="number" min="0" value="0"
+             class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+             onchange="updateRegenCalc()">
+        <span>to</span>
+        <input id="regenMagicTo" type="number" min="0" value="100"
+             class="config-input no-spinner border border-box-edge rounded-xs px-2 py-1 w-20"
+             onchange="updateRegenCalc()">
+      </div>
+      <div id="spells-regen-raw-calc-output">Change the values above to see the regen speed.</div>
+    </div>
     <div class="text-center pt-3">
       <button id="spells-advanced-toggle" type="button" class="m-auto border border-box-edge rounded-xs px-3 py-1 bg-white text-black cursor-pointer"
               aria-expanded="true" aria-controls="advanced-spells-options" onclick="toggleSpellsAdvanced()">Show more options</button>
